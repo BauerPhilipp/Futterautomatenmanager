@@ -10,10 +10,9 @@ namespace FutterautomatenDatenbank.Models
     {
         public int FutterautomatId { get; set; }
         // Zum korrekten einstellen der Futtermenge
-        public float FutterFaktor { get; set; }
+        public float FutterFaktor { get; set; } = 1f;
         // Die unterschiedlichen Fütterungen / Futterzeiten
-        public List<Fuetterung> Fuetterungen { get; set; }
-
+        public List<Fuetterung>? Fuetterungen { get; set; }
         public virtual Futter? FutterId { get; set; }
         public virtual Aquarium? AquariumId { get; set; }
         public virtual Person? PersonId { get; set; }
