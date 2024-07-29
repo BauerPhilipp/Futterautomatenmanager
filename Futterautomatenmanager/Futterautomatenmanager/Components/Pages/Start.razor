@@ -1,0 +1,41 @@
+﻿@page "/start"
+
+@rendermode InteractiveServer
+
+@using FutterautomatenDatenbank.Context
+@using FutterautomatenDatenbank.Models
+
+<h3>Start</h3>
+
+@foreach (var automat in Futterautomaten)
+{
+    <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
+        <FutterautomatComponent></FutterautomatComponent>
+    </CascadingValue>
+}
+
+<br /><br />
+<button type="button" class="btn-secondary" @onclick="OnButtonClicked">Neuen Futterautomaten erstellen</button>
+
+
+@code {
+
+
+
+
+
+    //löschen
+    private int id = 4;
+    private List<Futterautomat> Futterautomaten = new()
+    {
+        new Futterautomat(){FutterautomatId = 1},    
+        new Futterautomat(){FutterautomatId = 2},    
+        new Futterautomat(){FutterautomatId = 3}    
+    };
+
+    private void OnButtonClicked()
+    {
+        Futterautomaten.Add(new Futterautomat(){FutterautomatId = id++});
+    }
+
+}
