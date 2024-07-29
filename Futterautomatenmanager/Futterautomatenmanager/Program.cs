@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using FutterautomatenDatenbank.Context;
+using FutterautomatenDatenbank.Models;
 
 namespace Futterautomatenmanager
 {
@@ -22,6 +23,7 @@ namespace Futterautomatenmanager
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
+            builder.Services.AddTransient<IFutterautomatenEFCoreRepository, FutterautomatenEFCoreRepository>();
 
             builder.Services.AddAuthentication(options =>
                 {
