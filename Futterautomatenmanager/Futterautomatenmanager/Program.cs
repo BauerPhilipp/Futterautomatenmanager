@@ -4,6 +4,7 @@ using Futterautomatenmanager.Data;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using FutterautomatenDatenbank.Context;
 
 namespace Futterautomatenmanager
 {
@@ -38,6 +39,9 @@ namespace Futterautomatenmanager
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
+
+            builder.Services.AddDbContextFactory<FutterautomatenContext>(options => options.UseSqlite(
+                builder.Configuration.GetConnectionString("FutterautomatenDatenbankConnection")));
 
             builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
