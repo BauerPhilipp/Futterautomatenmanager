@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
-    internal class Futterautomat
+    public class Futterautomat
     {
         public int FutterautomatId { get; set; }
         // Zum korrekten einstellen der Futtermenge
         public float FutterFaktor { get; set; } = 1f;
         // Die unterschiedlichen Fütterungen / Futterzeiten
-        public List<Fuetterung>? Fuetterungen { get; set; }
-        public virtual Futter? FutterId { get; set; }
-        public virtual Aquarium? AquariumId { get; set; }
-        public virtual Person? PersonId { get; set; }
+        public virtual ICollection<Fuetterung>? Fuetterungen { get; set; }
+        public virtual Futter? Futter { get; set; }
+        public virtual Aquarium? Aquarium { get; set; }
+        public virtual Person? Person { get; set; }
     }
 }

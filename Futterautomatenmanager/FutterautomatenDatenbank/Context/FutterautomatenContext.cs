@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Context
 {
-    internal class FutterautomatenContext : DbContext
+    public class FutterautomatenContext : DbContext
     {
         public FutterautomatenContext(DbContextOptions<FutterautomatenContext> options) : base(options) { }
 

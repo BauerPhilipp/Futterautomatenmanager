@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
-    internal class Fuetterung
+    public class Fuetterung
     {
         public int FuetterungId { get; set; }
 
@@ -20,6 +20,6 @@ namespace FutterautomatenDatenbank.Models
         [Required]
         public TimeOnly Uhrzeit { get; set; }
 
-        public virtual Futterautomat? FutterautomatId { get; set; }
+        public virtual Futterautomat? Futterautomat { get; set; }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
-    internal class Futter
+    public class Futter
     {
         public int FutterId { get; set; }
 
@@ -15,5 +15,7 @@ namespace FutterautomatenDatenbank.Models
         public float Packungsinhalt { get; set; }
         public string FutterName { get; set; } = string.Empty;
         public string Beschreibung { get; set; } = string.Empty;
+
+        public virtual ICollection<Futterautomat>? Futterautomat { get; set; }
     }
 }
