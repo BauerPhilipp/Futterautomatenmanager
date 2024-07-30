@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//Methoden für Futterautomaten
 namespace FutterautomatenDatenbank.Models
 {
-    public class FutterautomatenEFCoreRepository : IFutterautomatenEFCoreRepository
+    public partial class FutterautomatenEFCoreRepository : IFutterautomatenEFCoreRepository
     {
         private readonly IDbContextFactory<FutterautomatenContext> contextFactory;
 
@@ -73,5 +74,11 @@ namespace FutterautomatenDatenbank.Models
             using var db = this.contextFactory.CreateDbContext();
             return db.Futterautomaten.Find(id);
         }
+
+        
+
+
+
+        
     }
 }
