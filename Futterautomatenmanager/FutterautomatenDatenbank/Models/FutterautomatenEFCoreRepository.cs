@@ -42,10 +42,10 @@ namespace FutterautomatenDatenbank.Models
             return db.Futterautomaten.ToList();
         }
 
-        public List<Futterautomat> GetFutterautomatByAquarium(string name)
+        public List<Futterautomat> GetFutterautomatenByAquarium(int id)
         {
             using var db = this.contextFactory.CreateDbContext();
-            return db.Futterautomaten.Where(a => a.Aquarium.Name == name).ToList();
+            return db.Futterautomaten.Where(a => a.Aquarium.AquariumId == id).ToList();
         }
 
         public void UpdateFutterautomat(int id, Futterautomat futterautomat)
