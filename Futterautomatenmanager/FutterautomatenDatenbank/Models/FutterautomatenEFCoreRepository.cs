@@ -67,5 +67,11 @@ namespace FutterautomatenDatenbank.Models
                 db.SaveChanges();
             }
         }
+
+        public Futterautomat GetFutterautomat(int id)
+        {
+            using var db = this.contextFactory.CreateDbContext();
+            return db.Futterautomaten.Find(id);
+        }
     }
 }

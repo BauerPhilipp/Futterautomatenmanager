@@ -1,37 +1,65 @@
 ﻿@page "/start"
 
 @rendermode InteractiveServer
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
 
 @using FutterautomatenDatenbank.Context
 @using FutterautomatenDatenbank.Models
 
 <h3>Start</h3>
 
-@foreach (var automat in Futterautomaten)
+@if(Futterautomaten is not null)
 {
-    <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
-        <FutterautomatComponent></FutterautomatComponent>
-    </CascadingValue>
+    @foreach (var automat in Futterautomaten)
+    {
+        <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
+            <FutterautomatComponent></FutterautomatComponent>
+        </CascadingValue>
+    }
+
+}
+else
+{
+    <p>Kein Futterautomat vorhanden?</p>
 }
 
+
 <br /><br />
-<button type="button" class="btn-secondary" @onclick="OnButtonClicked">Neuen Futterautomaten erstellen</button>
+<button type="button" class="btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
+<button type="button" class="btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
  
 
 @code {
+    Random random = new Random();
+    public List<Futterautomat>? Futterautomaten;
 
-    //löschen
-    private int id = 4;
-    private List<Futterautomat> Futterautomaten = new()
-    {
-        new Futterautomat(){FutterautomatId = 1},    
-        new Futterautomat(){FutterautomatId = 2},    
-        new Futterautomat(){FutterautomatId = 3}    
-    };
 
-    private void OnButtonClicked()
+    protected override void OnAfterRender(bool firstRender)
     {
-        Futterautomaten.Add(new Futterautomat(){FutterautomatId = id++});
+        if (firstRender)
+        {
+            Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+            StateHasChanged();
+        }
+
+    }
+
+    private void OnCreateButtonClicked()
+    {
+        Futterautomat futterautomat = new() {FutterFaktor = random.Next(1,100) };
+        FutterautomatenEFCoreRepository.AddFutterautomat(futterautomat);
+        Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+    }
+
+    private void OnDeliteButtonClicked()
+    {
+        var futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+        if (futterautomaten is null) return;
+        foreach (var futterautomat in futterautomaten)
+        {
+            FutterautomatenEFCoreRepository.DeleteFutterautomat(futterautomat.FutterautomatId);
+        }
+        Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
 
 }
