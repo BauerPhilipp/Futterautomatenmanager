@@ -13,17 +13,21 @@ namespace FutterautomatenDatenbank.Models
     {
         public void AddAquarium(Aquarium aquarium)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            db.Aquarien.Add(aquarium);
+            db.SaveChanges();
         }
 
         public Aquarium GetAquarium(int id)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            return db.Aquarien.Find(id);
         }
 
         public List<Aquarium> GetAquarien()
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            return db.Aquarien.ToList();
         }
 
         public void UpdateAquarium(int id, Aquarium aquarium)
@@ -33,7 +37,14 @@ namespace FutterautomatenDatenbank.Models
 
         public void DeleteAquarium(int id)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+
+            var aquarium = db.Aquarien.Find(id);
+            if (aquarium is null) return;
+
+            db.Aquarien.Remove(aquarium);
+
+            db.SaveChanges();
         }
     }
 }

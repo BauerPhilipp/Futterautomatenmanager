@@ -14,17 +14,21 @@ namespace FutterautomatenDatenbank.Models
 
         public void AddFuetterung(Fuetterung fuetterung)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            db.Fuetterungen.Add(fuetterung);
+            db.SaveChanges();
         }
 
         public Fuetterung GetFuetterung(int id)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            return db.Fuetterungen.Find(id);
         }
 
         public List<Fuetterung> GetFuetterungen()
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+            return db.Fuetterungen.ToList();
         }
 
         public void UpdateFuetterung(int id, Fuetterung fuetterung)
@@ -34,7 +38,14 @@ namespace FutterautomatenDatenbank.Models
 
         public void DeleteFuetterung(int id)
         {
-            throw new NotImplementedException();
+            using var db = contextFactory.CreateDbContext();
+
+            var fuetterung = db.Fuetterungen.Find(id);
+            if (fuetterung is null) return;
+
+            db.Fuetterungen.Remove(fuetterung);
+
+            db.SaveChanges();
         }
     }
 }
