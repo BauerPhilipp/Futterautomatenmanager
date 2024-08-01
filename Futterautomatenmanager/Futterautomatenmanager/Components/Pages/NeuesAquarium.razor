@@ -1,0 +1,70 @@
+﻿@page "/neuesaquarium"
+
+@rendermode InteractiveServer
+
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+@using FutterautomatenDatenbank.Models
+@using System.Text
+
+<h3>NeuesAquarium</h3>
+
+<div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" class="form-control" id="Name" @bind=@Name >
+</div>
+<div class="form-group">
+    <label for="Aufstellort">Aufstellort</label>
+    <input type="text" class="form-control" id="Aufstellort" @bind=@Aufstellort>
+</div>
+<div class="form-group">
+    <label for="Groesse">Größe</label>
+    <input type="text" class="form-control" id="Groesse" @bind=@Groesseße>
+</div>
+
+<br />
+<br />
+<button type="button" @onclick="SaveData">Save</button>
+<br />
+<textarea class="@(isFehler ? "" : "d.none")" @bind=@fehlerLabel readonly style="color:red"></textarea>
+
+@code {
+    private bool isFehler = false;
+    private string fehlerLabel = string.Empty;
+    private string Name { get; set; } = string.Empty;
+    private string Aufstellort { get; set; } = string.Empty;
+    private string Groesseße { get; set; } = string.Empty;
+
+    private void SaveData()
+    {
+        Aquarium aquarium = new()
+        {
+            Name = this.Name,
+            Aufstellort = this.Aufstellort,
+            Groeße = this.Groesseße
+        };
+
+        bool exists = FutterautomatenEFCoreRepository.GetAquarien().Any(a => a.Name == aquarium.Name);
+
+        if (aquarium.Name.Length < 1)
+        {
+            fehlerLabel = "Kein Name angegeben!";
+            isFehler = true;
+            return;
+        }else if (exists)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Name bereits vorhanden!");
+            sb.AppendLine("Bereits vergebene Namen:");
+            foreach (var aq in FutterautomatenEFCoreRepository.GetAquarien())
+            {
+                sb.AppendLine($"{aq.Name},");
+            }
+            fehlerLabel = $"{sb.ToString()}";
+            isFehler = true;
+            return;
+        }
+
+        isFehler = false;
+        FutterautomatenEFCoreRepository.AddAquarium(aquarium);
+    }
+}
