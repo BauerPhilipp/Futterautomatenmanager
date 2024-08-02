@@ -11,6 +11,9 @@ namespace FutterautomatenDatenbank.Models
         public int FutterautomatId { get; set; }
         // Zum korrekten einstellen der Futtermenge
         public float FutterFaktor { get; set; } = 1f;
+
+        public string Bezeichnung { get; set; } = string.Empty;
+
         // Die unterschiedlichen Fütterungen / Futterzeiten
         public virtual ICollection<Fuetterung>? Fuetterungen { get; set; }
         public virtual Futter? Futter { get; set; }

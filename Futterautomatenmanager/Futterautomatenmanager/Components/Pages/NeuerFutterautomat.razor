@@ -1,4 +1,6 @@
 ﻿@page "/neuerfutterautomat"
+@page "/neuerfutterautomat/{id:int}"
+
 
 @rendermode InteractiveServer
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
@@ -6,19 +8,23 @@
 @using FutterautomatenDatenbank.Context
 @using FutterautomatenDatenbank.Models
 
-<h3 class="text-center">Neuen Futterautomat erstellen</h3>
+<h3 class="text-center">@((Id >= 0) ? "Futterautomat anpassen" : "Neuen Futterautomat erstellen")</h3>
 
 <form>
     <div class="form-group">
+        <label for="bezeichnung">Bezeichnung</label>
+        <input type="text" class="form-control" id="bezeichnung" @bind="Bezeichnung">
+    </div>
+    <div class="form-group">
         <label for="faktorFuetterungen">Faktor Fütterungen</label>
-        <input type="number" class="form-control" id="faktorFuetterungen" value="1">
+        <input type="number" class="form-control" id="faktorFuetterungen" @bind="FaktorFuetterungen">
     </div>
     <br />
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Aquarium</label>
+        <label for="ControlSelect1">Aquarium</label>
         @if(aquarien is not null && aquarien.Count > 0)
         {
-            <select class="form-control" id="exampleFormControlSelect1">
+            <select class="form-control" id="ControlSelect1">
                 @foreach (var aquarium in aquarien)
                 {
                     <option value="@aquarium.Name"></option>
@@ -37,6 +43,13 @@
 </form>
 
 @code {
+    [Parameter]
+    public int Id { get; set; } = -1;
+
+    public float FaktorFuetterungen { get; set; } = 1;
+
+    public string Bezeichnung { get; set; }
+
     private List<Aquarium>? aquarien;
 
     protected override void OnAfterRender(bool firstRender)
@@ -44,6 +57,18 @@
         if (firstRender)
         {
             aquarien = FutterautomatenEFCoreRepository.GetAquarien();
+            if (Id >= 0)
+            {
+                var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(Id);
+                Bezeichnung = futterautomat.Bezeichnung;
+                FaktorFuetterungen = futterautomat.FutterFaktor;
+
+                if (futterautomat.Aquarium is not null)
+                {
+                    aquarien.Remove(futterautomat.Aquarium);
+                    aquarien.Insert(0, futterautomat.Aquarium);
+                }
+            }
             StateHasChanged();
         }
     }

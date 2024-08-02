@@ -1,17 +1,32 @@
-﻿<button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color">Futterautomat<br />@Id</button>
+﻿@using FutterautomatenDatenbank.Models
+
+@inject NavigationManager navigationManager
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+
+<button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color">Futterautomat<br />@Bezeichnung</button>
 
 @code {
     [CascadingParameter(Name = "FutterautomatId")]
     public int Id { get; set; }
+
+    public string Bezeichnung { get; set; } = "NoName";
 
     private string color = "black";
 
     private void OnButtonClicked()
     {
 
-
+        navigationManager.NavigateTo($"/neuerfutterautomat/{Id}");
         Console.WriteLine($"Button wurde geklickt!");
         color = "white";
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Bezeichnung = FutterautomatenEFCoreRepository.GetFutterautomat(Id).Bezeichnung;
+        }
     }
 
 
