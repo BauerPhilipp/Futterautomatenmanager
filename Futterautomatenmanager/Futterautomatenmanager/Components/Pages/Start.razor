@@ -61,9 +61,9 @@ else
             {
                 person = FutterautomatenEFCoreRepository.GetPersonen().FirstOrDefault(p => p.Name == angemeldeterUser);
             }
-
             StateHasChanged();
         }
+        person = FutterautomatenEFCoreRepository.GetPersonen().FirstOrDefault(p => p.Name == angemeldeterUser);
     }
 
     private void OnCreateButtonClicked()
@@ -83,11 +83,16 @@ else
 
     private void OnDeliteButtonClicked()
     {
-        var futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
-        if (futterautomaten is null) return;
-        foreach (var futterautomat in futterautomaten)
+        Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+        if (Futterautomaten is null) return;
+
+        foreach (var futterautomat in Futterautomaten)
         {
             FutterautomatenEFCoreRepository.DeleteFutterautomat(futterautomat.FutterautomatId);
+            var person = futterautomat.Person;
+            if (person is null) return;
+            person.Futterautomaten.Remove(futterautomat);
+            FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, person);
         }
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }

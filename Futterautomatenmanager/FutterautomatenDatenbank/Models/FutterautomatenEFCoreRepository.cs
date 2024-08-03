@@ -40,7 +40,7 @@ namespace FutterautomatenDatenbank.Models
         public List<Futterautomat> GetFutterautomaten()
         {
             using var db = this.contextFactory.CreateDbContext();
-            return db.Futterautomaten.ToList();
+            return db.Futterautomaten.Include(f => f.Person).ToList();
         }
 
         public List<Futterautomat> GetFutterautomatenByAquarium(int id)
@@ -72,6 +72,8 @@ namespace FutterautomatenDatenbank.Models
         public Futterautomat GetFutterautomat(int id)
         {
             using var db = this.contextFactory.CreateDbContext();
+            //return db.Futterautomaten.Find(id);
+
             return db.Futterautomaten
                 .Include(f => f.Person)
                 .Include(f => f.Futter)
@@ -79,10 +81,10 @@ namespace FutterautomatenDatenbank.Models
                 .Include(f => f.Fuetterungen).Single(s => s.FutterautomatId == id);
         }
 
-        
 
 
 
-        
+
+
     }
 }
