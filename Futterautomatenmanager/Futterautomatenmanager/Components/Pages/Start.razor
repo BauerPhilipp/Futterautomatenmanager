@@ -1,15 +1,21 @@
 ﻿@page "/start"
 @page "/"
 
-@rendermode InteractiveServer
-@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
-
 @using FutterautomatenDatenbank.Context
 @using FutterautomatenDatenbank.Models
 
+@using Microsoft.AspNetCore.Authorization
+@attribute [Authorize]
+
+@rendermode InteractiveServer
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+
 <h3>Start</h3>
 
-@if(Futterautomaten is not null)
+@if (Futterautomaten is not null)
 {
     @foreach (var automat in Futterautomaten)
     {
@@ -25,32 +31,53 @@ else
 }
 
 
-<br /><br />
+<br />
+<br />
 <button type="button" class="btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
 <button type="button" class="btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
- 
+
 
 
 
 @code {
-    Random random = new Random();
+    string angemeldeterUser = string.Empty;
     public List<Futterautomat>? Futterautomaten;
+    Person? person; 
 
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
             Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+            var auth = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            angemeldeterUser = auth?.User?.Identity?.Name ?? "";
+            if (!FutterautomatenEFCoreRepository.GetPersonen().Any(p => p.Name == angemeldeterUser))
+            {
+                person = new Person() {Name = angemeldeterUser};
+                FutterautomatenEFCoreRepository.AddPerson(person);
+            }
+            else
+            {
+                person = FutterautomatenEFCoreRepository.GetPersonen().FirstOrDefault(p => p.Name == angemeldeterUser);
+            }
+
             StateHasChanged();
         }
-
     }
 
     private void OnCreateButtonClicked()
     {
-        Futterautomat futterautomat = new() {FutterFaktor = random.Next(1,100) };
+        if (person is null) return;
+        Futterautomat futterautomat = new() { FutterFaktor = 1};
         FutterautomatenEFCoreRepository.AddFutterautomat(futterautomat);
+        if (person.Futterautomaten is null)
+        {
+            person.Futterautomaten = new List<Futterautomat>();
+        } 
+        person.Futterautomaten.Add(futterautomat);
+        var newPerson = new Person() {PersonId = person.PersonId, Name = person.Name, Futterautomaten = person.Futterautomaten};
+        FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, newPerson);
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
 

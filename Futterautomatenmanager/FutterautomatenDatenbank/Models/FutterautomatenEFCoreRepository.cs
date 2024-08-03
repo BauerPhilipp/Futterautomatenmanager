@@ -72,7 +72,11 @@ namespace FutterautomatenDatenbank.Models
         public Futterautomat GetFutterautomat(int id)
         {
             using var db = this.contextFactory.CreateDbContext();
-            return db.Futterautomaten.Find(id);
+            return db.Futterautomaten
+                .Include(f => f.Person)
+                .Include(f => f.Futter)
+                .Include(f => f.Aquarium)
+                .Include(f => f.Fuetterungen).Single(s => s.FutterautomatId == id);
         }
 
         

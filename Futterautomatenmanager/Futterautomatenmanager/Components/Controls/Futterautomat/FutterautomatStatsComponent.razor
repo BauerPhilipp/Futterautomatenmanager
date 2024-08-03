@@ -1,10 +1,44 @@
-﻿
+﻿@using FutterautomatenDatenbank.Models
 
-@* <text>Zeile 1,  </text>
-<text>Zeile 2,  </text>
-<text>Zeile 3  </text> *@
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+
+<div style="overflow">
+    <div>Ersteller: @personName</div>
+    <div>Aquarium: @aquariumName</div>
+    <div>Futter: @futterName</div>
+    <div>Anzahl Fütterungen: @fuetterungen</div>
+    <div>Futter Faktor: @futterFaktor</div>
+</div>
+
 
 @code {
     [CascadingParameter(Name = "FutterautomatId")]
     public int Id { get; set; }
+
+    Futterautomat? futterautomat;
+    string personName = string.Empty;
+    string aquariumName = string.Empty;
+    string futterName = string.Empty;
+    int fuetterungen = 0;
+    float futterFaktor = 0;
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(Id);
+            personName = futterautomat?.Person?.Name ?? "na";
+            aquariumName = futterautomat?.Aquarium?.Name ?? "na";
+            futterName = futterautomat?.Futter?.FutterName ?? "na";
+            fuetterungen = (futterautomat.Fuetterungen is null) ? 0 : futterautomat.Fuetterungen.Count;
+            futterFaktor = futterautomat.FutterFaktor;
+
+
+
+            StateHasChanged();
+        }
+    }
+
+
 }

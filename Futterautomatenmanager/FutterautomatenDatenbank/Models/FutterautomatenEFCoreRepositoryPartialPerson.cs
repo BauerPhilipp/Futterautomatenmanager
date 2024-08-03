@@ -33,7 +33,19 @@ namespace FutterautomatenDatenbank.Models
 
         public void UpdatePerson(int id, Person person)
         {
-            throw new NotImplementedException();
+            if (person == null) throw new ArgumentException(nameof(person));
+            if (id != person.PersonId) return;
+
+            using var db = this.contextFactory.CreateDbContext();
+
+            var personToUpdate = db.Personen.Find(id);
+
+            if (personToUpdate is not null)
+            {
+                personToUpdate.Name = person.Name;
+                personToUpdate.Futterautomaten = person.Futterautomaten;
+                db.SaveChanges();
+            }
         }
 
         public void DeletePerson(int id)
