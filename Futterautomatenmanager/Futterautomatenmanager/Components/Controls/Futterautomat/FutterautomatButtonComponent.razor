@@ -3,7 +3,7 @@
 @inject NavigationManager navigationManager
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
 
-<button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color">Futterautomat<br />@Bezeichnung</button>
+<button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color; height:100px; width:200px">Futterautomat<br />@Bezeichnung</button>
 
 @code {
     [CascadingParameter(Name = "FutterautomatId")]
