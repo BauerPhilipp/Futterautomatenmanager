@@ -1,7 +1,9 @@
 ﻿@page "/neuesaquarium"
+@page "/neuesaquarium/{id:int}"
 
 @rendermode InteractiveServer
 
+@inject NavigationManager navigationManager
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
 @using FutterautomatenDatenbank.Models
 @using System.Text
@@ -37,11 +39,16 @@
 
 
 @code {
+    [Parameter]
+    public int Id { get; set; } = -1;
+
     private bool isFehler = false;
     private string fehlerLabel = string.Empty;
     private string Name { get; set; } = string.Empty;
     private string Aufstellort { get; set; } = string.Empty;
     private string Groesseße { get; set; } = string.Empty;
+
+    Futterautomat futterautomat;
 
     private void SaveData()
     {
@@ -75,5 +82,25 @@
 
         isFehler = false;
         FutterautomatenEFCoreRepository.AddAquarium(aquarium);
+
+        if(Id > 0)
+        {
+            this.futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(Id);
+            Futterautomat futterautomat = new Futterautomat()
+            {
+                Aquarium = aquarium,
+                Bezeichnung = this.futterautomat.Bezeichnung,
+                Fuetterungen = this.futterautomat.Fuetterungen,
+                Futter = this.futterautomat.Futter,
+                FutterFaktor = this.futterautomat.FutterFaktor,
+                Person = this.futterautomat.Person
+            };
+            FutterautomatenEFCoreRepository.UpdateFutterautomat(Id, futterautomat);
+            navigationManager.NavigateTo($"/neuerfutterautomat/{Id}");
+        }
+        else
+        {
+            navigationManager.NavigateTo($"/");
+        }
     }
 }

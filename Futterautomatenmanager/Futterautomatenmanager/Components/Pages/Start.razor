@@ -33,8 +33,11 @@ else
 
 <br />
 <br />
-<button type="button" class="btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
-<button type="button" class="btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
+@if(person is not null)
+{
+    <a href="/neuerfutterautomat?personId=@person.PersonId" class="btn btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</a>
+}
+<button type="button" class="btn btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
 
 
 

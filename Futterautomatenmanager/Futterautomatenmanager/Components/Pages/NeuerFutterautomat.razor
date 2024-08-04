@@ -1,5 +1,5 @@
 ﻿@page "/neuerfutterautomat"
-@page "/neuerfutterautomat/{id:int}"
+@page "/neuerfutterautomat/{FutterautomatId:int}"
 
 
 @rendermode InteractiveServer
@@ -8,59 +8,83 @@
 @using FutterautomatenDatenbank.Context
 @using FutterautomatenDatenbank.Models
 
-<h3 class="text-center">@((Id >= 0) ? "Futterautomat anpassen" : "Neuen Futterautomat erstellen")</h3>
+<h3 class="text-center">@((FutterautomatId >= 0) ? "Futterautomat anpassen" : "Neuen Futterautomat erstellen")</h3>
 
 <form>
     <div class="form-group">
         <label for="bezeichnung">Bezeichnung</label>
-        <input type="text" class="form-control" id="bezeichnung" @bind="Bezeichnung">
+        <input type="text" class="form-control" id="bezeichnung" @bind="BezeichnungFutterautomat">
     </div>
+    <br />
+    <div class="form-group">
+        <label for="ControlSelect1">Futter</label>
+        @if (futterArten is not null && futterArten.Count > 0)
+        {
+            <select class="form-control" id="ControlSelect1">
+                @foreach (var futterArt in futterArten)
+                {
+                    <option value="@futterArt.FutterName">@futterArt.FutterName</option>
+                }
+            </select>
+        }
+        <br />
+        <a href="/neuesfutter" class="btn btn-primary">Neues Futter</a>
+    </div>
+    <br />
     <div class="form-group">
         <label for="faktorFuetterungen">Faktor Fütterungen</label>
         <input type="number" class="form-control" id="faktorFuetterungen" @bind="FaktorFuetterungen">
     </div>
     <br />
     <div class="form-group">
-        <label for="ControlSelect1">Aquarium</label>
-        @if(aquarien is not null && aquarien.Count > 0)
+        <label for="ControlSelect2">Aquarium</label>
+        @if (aquarien is not null && aquarien.Count > 0)
         {
-            <select class="form-control" id="ControlSelect1">
+            <select class="form-control" id="ControlSelect2">
                 @foreach (var aquarium in aquarien)
                 {
-                    <option value="@aquarium.Name"></option>
+                    <option value="@aquarium.Name">@aquarium.Name</option>
                 }
             </select>
         }
-        else
-        {
-            <button type="button" class="btn-primary">Neues Aquarium</button>
-        }
+        <br />
+        <a href="/neuesAquarium/@FutterautomatId" class="btn btn-primary">Neues Aquarium</a>
 
     </div>
 
+
+
     <br /><br />
-    <button type="button" class="btn-primary">Speichern</button>
+    <button type="button" class="btn-primary" @onclick="Save">Speichern</button>
 </form>
 
 @code {
+    string s = "";
     [Parameter]
-    public int Id { get; set; } = -1;
+    public int FutterautomatId { get; set; } = -1;
+
+    [SupplyParameterFromQuery(Name ="personId")]
+    public int PersonId { get; set; }   
 
     public float FaktorFuetterungen { get; set; } = 1;
 
-    public string Bezeichnung { get; set; }
+    public string BezeichnungFutterautomat { get; set; } = string.Empty;
 
     private List<Aquarium>? aquarien;
+    private List<Futter>? futterArten;
 
     protected override void OnAfterRender(bool firstRender)
     {
         if (firstRender)
         {
+            //Initialisere Listen
             aquarien = FutterautomatenEFCoreRepository.GetAquarien();
-            if (Id >= 0)
+            futterArten = FutterautomatenEFCoreRepository.GetFutter();
+
+            if (FutterautomatId > 0)
             {
-                var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(Id);
-                Bezeichnung = futterautomat.Bezeichnung;
+                var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+                BezeichnungFutterautomat = futterautomat.Bezeichnung;
                 FaktorFuetterungen = futterautomat.FutterFaktor;
 
                 if (futterautomat.Aquarium is not null)
@@ -68,9 +92,29 @@
                     aquarien.Remove(futterautomat.Aquarium);
                     aquarien.Insert(0, futterautomat.Aquarium);
                 }
-            }
+
+                if (futterautomat.Futter is not null)
+                {
+                    futterArten.Remove(futterautomat.Futter);
+                    futterArten.Insert(0, futterautomat.Futter);
+                }
+
+            }      
             StateHasChanged();
         }
+    }
+
+    //Speichern / Aktualisieren Futterautomat
+    private void Save()
+    {
+        FutterautomatenEFCoreRepository.AddFutterautomat(new Futterautomat()
+        {
+           Aquarium = aquarien.FirstOrDefault(),
+           Bezeichnung = BezeichnungFutterautomat, 
+           Futter = futterArten.FirstOrDefault(),
+           FutterFaktor = FaktorFuetterungen,
+           Person = FutterautomatenEFCoreRepository.GetPerson(PersonId)
+        });
     }
 
 }
