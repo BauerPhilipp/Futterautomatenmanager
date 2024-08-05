@@ -16,7 +16,7 @@
     private void OnButtonClicked()
     {
 
-        navigationManager.NavigateTo($"/neuerfutterautomat/{Id}");
+        navigationManager.NavigateTo($"/neuerfutterautomat/update/{Id}");
         Console.WriteLine($"Button wurde geklickt!");
         color = "white";
     }
@@ -26,6 +26,7 @@
         if (firstRender)
         {
             Bezeichnung = FutterautomatenEFCoreRepository.GetFutterautomat(Id).Bezeichnung;
+            StateHasChanged();
         }
     }
 

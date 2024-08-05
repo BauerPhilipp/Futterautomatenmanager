@@ -15,6 +15,6 @@ namespace FutterautomatenDatenbank.Models
         public string Aufstellort { get; set; } = string.Empty;
         public string Groeße { get; set; } = string.Empty;
 
-        public virtual ICollection<Futterautomat>? Futterautomaten {  get; set; }
+        public virtual ICollection<Futterautomat>? Futterautomaten { get; set; } = new List<Futterautomat>();
     }
 }

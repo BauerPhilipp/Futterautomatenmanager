@@ -60,6 +60,7 @@ namespace FutterautomatenDatenbank.Models
 
             if (futterautomatToUpdate is not null)
             {
+                futterautomatToUpdate.Bezeichnung = futterautomat.Bezeichnung;
                 futterautomatToUpdate.FutterFaktor = futterautomat.FutterFaktor;
                 futterautomatToUpdate.Futter = futterautomat.Futter;
                 futterautomatToUpdate.Fuetterungen = futterautomat.Fuetterungen;
@@ -80,11 +81,5 @@ namespace FutterautomatenDatenbank.Models
                 .Include(f => f.Aquarium)
                 .Include(f => f.Fuetterungen).Single(s => s.FutterautomatId == id);
         }
-
-
-
-
-
-
     }
 }

@@ -35,7 +35,10 @@ else
 <br />
 @if(person is not null)
 {
-    <a href="/neuerfutterautomat?personId=@person.PersonId" class="btn btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</a>
+    <button class="btn btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
+}else
+{
+    <label>Keine Person angemeldet</label>
 }
 <button type="button" class="btn btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
 
@@ -71,6 +74,9 @@ else
 
     private void OnCreateButtonClicked()
     {
+
+
+        //Hiermit funktioniert die einfache erstellung eines Futterautomaten
         if (person is null) return;
         Futterautomat futterautomat = new() { FutterFaktor = 1};
         FutterautomatenEFCoreRepository.AddFutterautomat(futterautomat);

@@ -1,10 +1,10 @@
-﻿@page "/neuerfutterautomat"
-@page "/neuerfutterautomat/{FutterautomatId:int}"
+﻿@page "/neuerfutterautomat/{PersonId:int}"
+@page "/neuerfutterautomat/update/{FutterautomatId:int}"
 
 
 @rendermode InteractiveServer
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
-
+@inject NavigationManager navigationManager
 @using FutterautomatenDatenbank.Context
 @using FutterautomatenDatenbank.Models
 
@@ -40,7 +40,7 @@
         <label for="ControlSelect2">Aquarium</label>
         @if (aquarien is not null && aquarien.Count > 0)
         {
-            <select class="form-control" id="ControlSelect2">
+            <select class="form-control" id="ControlSelect2" @onchange="OnAquariumSelected">
                 @foreach (var aquarium in aquarien)
                 {
                     <option value="@aquarium.Name">@aquarium.Name</option>
@@ -48,7 +48,7 @@
             </select>
         }
         <br />
-        <a href="/neuesAquarium/@FutterautomatId" class="btn btn-primary">Neues Aquarium</a>
+        <a class="btn btn-primary" @onclick="NeuesAquarium">Neues Aquarium</a>
 
     </div>
 
@@ -63,8 +63,10 @@
     [Parameter]
     public int FutterautomatId { get; set; } = -1;
 
-    [SupplyParameterFromQuery(Name ="personId")]
-    public int PersonId { get; set; }   
+    [Parameter]
+    public int PersonId { get; set; }
+
+    string ausgewaehltesAquarium = string.Empty;
 
     public float FaktorFuetterungen { get; set; } = 1;
 
@@ -80,41 +82,77 @@
             //Initialisere Listen
             aquarien = FutterautomatenEFCoreRepository.GetAquarien();
             futterArten = FutterautomatenEFCoreRepository.GetFutter();
+            ausgewaehltesAquarium = aquarien.First().Name;
 
             if (FutterautomatId > 0)
             {
                 var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
                 BezeichnungFutterautomat = futterautomat.Bezeichnung;
                 FaktorFuetterungen = futterautomat.FutterFaktor;
+            }
 
-                if (futterautomat.Aquarium is not null)
-                {
-                    aquarien.Remove(futterautomat.Aquarium);
-                    aquarien.Insert(0, futterautomat.Aquarium);
-                }
-
-                if (futterautomat.Futter is not null)
-                {
-                    futterArten.Remove(futterautomat.Futter);
-                    futterArten.Insert(0, futterautomat.Futter);
-                }
-
-            }      
             StateHasChanged();
         }
+    }
+
+    private void NeuesAquarium()
+    {
+        if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuesaquarium/{FutterautomatId}");
+    }
+    private void OnAquariumSelected(ChangeEventArgs e)
+    {
+        ausgewaehltesAquarium = e.Value.ToString();
     }
 
     //Speichern / Aktualisieren Futterautomat
     private void Save()
     {
-        FutterautomatenEFCoreRepository.AddFutterautomat(new Futterautomat()
+        if (FutterautomatId > 0)
         {
-           Aquarium = aquarien.FirstOrDefault(),
-           Bezeichnung = BezeichnungFutterautomat, 
-           Futter = futterArten.FirstOrDefault(),
-           FutterFaktor = FaktorFuetterungen,
-           Person = FutterautomatenEFCoreRepository.GetPerson(PersonId)
-        });
+            var neuerFutterautomat = new Futterautomat()
+                {
+                    Bezeichnung = BezeichnungFutterautomat,
+                    FutterFaktor = FaktorFuetterungen,
+                    //Fuetterungen = ?;
+                };
+
+            FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, neuerFutterautomat);
+            //UpdateFutter();
+            UpdateFutterautomat(neuerFutterautomat);
+            UpdateAquarium();
+        }
+        navigationManager.NavigateTo("/");
+    }
+
+
+    private void UpdateFutter()
+    {
+
+    }
+    private void UpdateAquarium()
+    {
+        Aquarium aquarium;
+        if(ausgewaehltesAquarium != "")
+        {
+
+            aquarium = FutterautomatenEFCoreRepository.GetAquarien().First(a => a.Name == ausgewaehltesAquarium);
+            var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+            aquarium.Futterautomaten.Add(futterautomat);
+
+            FutterautomatenEFCoreRepository.UpdateAquarium(aquarium);  
+        }
+
+    }
+
+    private void UpdateFutterautomat(Futterautomat futterautomat)
+    {
+        futterautomat.FutterautomatId = FutterautomatId;
+        FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
+    }
+
+    private void UpdatePerson()
+    {
+        
     }
 
 }

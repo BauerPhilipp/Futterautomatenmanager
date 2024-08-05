@@ -30,9 +30,23 @@ namespace FutterautomatenDatenbank.Models
             return db.Aquarien.ToList();
         }
 
-        public void UpdateAquarium(int id, Aquarium aquarium)
+        public void UpdateAquarium(Aquarium aquarium)
         {
-            throw new NotImplementedException();
+
+            // So funktioniert es
+            if (aquarium == null) throw new ArgumentException(nameof(aquarium));
+
+            using var db = this.contextFactory.CreateDbContext();
+
+            var aquariumToUpdate = db.Aquarien.Find(aquarium.AquariumId);
+
+            if (aquariumToUpdate is not null)
+            {
+                aquariumToUpdate.Name = aquarium.Name;
+                aquariumToUpdate.Futterautomaten = aquarium.Futterautomaten;
+                aquariumToUpdate.Aufstellort = aquarium.Aufstellort;
+                db.SaveChanges();
+            }
         }
 
         public void DeleteAquarium(int id)

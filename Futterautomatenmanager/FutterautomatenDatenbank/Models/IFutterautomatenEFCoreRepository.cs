@@ -15,7 +15,7 @@ namespace FutterautomatenDatenbank.Models
         void AddAquarium(Aquarium aquarium);
         Aquarium GetAquarium(int id);
         List<Aquarium> GetAquarien();
-        void UpdateAquarium(int id, Aquarium aquarium);
+        void UpdateAquarium(Aquarium aquarium);
         void DeleteAquarium(int id);
 
         //Personen

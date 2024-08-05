@@ -16,7 +16,7 @@ namespace FutterautomatenDatenbank.Models
         public string Bezeichnung { get; set; } = string.Empty;
 
         // Die unterschiedlichen Fütterungen / Futterzeiten
-        public virtual ICollection<Fuetterung>? Fuetterungen { get; set; }
+        public virtual ICollection<Fuetterung> Fuetterungen { get; set; } = new List<Fuetterung>();
         public virtual Futter? Futter { get; set; }
         public virtual Aquarium? Aquarium { get; set; }
         public virtual Person? Person { get; set; }
