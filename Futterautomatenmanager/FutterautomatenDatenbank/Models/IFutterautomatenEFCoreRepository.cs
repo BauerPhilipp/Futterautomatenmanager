@@ -36,7 +36,7 @@ namespace FutterautomatenDatenbank.Models
         void AddFutter(Futter futter);
         Futter GetFutter(int id);
         List<Futter> GetFutter();
-        void UpdateFutter(int id, Futter futter);
+        void UpdateFutter(Futter futter);
         void DeleteFutter(int id);
 
     }

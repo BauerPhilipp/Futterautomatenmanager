@@ -24,15 +24,29 @@ namespace FutterautomatenDatenbank.Models
             return db.FutterArt.Find(id);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns>Liste mit Futterarten</returns>
         public List<Futter> GetFutter()
         {
             using var db = this.contextFactory.CreateDbContext();
             return db.FutterArt.ToList();
         }
 
-        public void UpdateFutter(int id, Futter futter)
+        public void UpdateFutter(Futter futter)
         {
-            throw new NotImplementedException();
+            if(futter is null)throw new NotImplementedException();
+            using var db = this.contextFactory.CreateDbContext();
+            Futter futterToUpdate = db.FutterArt.FirstOrDefault(f => f.FutterId == futter.FutterId);
+            if (futterToUpdate is not null) 
+            { 
+                futterToUpdate.FutterName = futter.FutterName;
+                futterToUpdate.Beschreibung = futter.Beschreibung;
+                futterToUpdate.Packungsinhalt = futter.Packungsinhalt;
+                futterToUpdate.Futterautomaten = futter.Futterautomaten;
+                db.SaveChanges();
+            };
         }
 
         public void DeleteFutter(int id)

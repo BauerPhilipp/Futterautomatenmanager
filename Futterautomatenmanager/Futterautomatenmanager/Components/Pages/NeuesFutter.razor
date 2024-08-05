@@ -1,0 +1,92 @@
+﻿@page "/neuesfutter"
+@page "/neuesfutter/{FutterautomatId:int}"
+@page "/neuesfutter/update/{FutterId:int}"
+
+@rendermode InteractiveServer
+
+@using FutterautomatenDatenbank.Models
+@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+@inject NavigationManager navigationManager
+
+<h3>NeuesFutter</h3>
+<h1>Id = @FutterId</h1>
+
+<div class="form-group">
+    <label for="Name">Name</label>
+    <input type="text" class="form-control" id="Name" @bind=@Name>
+</div>
+<div class="form-group">
+    <label for="Packungsinhalt">Packungsinhalt</label>
+    <input type="number" class="form-control" id="Packungsinhalt" @bind=@Packungsinhalt>
+</div>
+<div class="form-group">
+    <label for="Beschreibung">Beschreibung</label>
+    <textarea type="text" class="form-control" id="Beschreibung" @bind=@Beschreibung></textarea>
+</div>
+<br />
+<button type="button" class="btn btn-primary" @onclick="Save">Speichern</button> &nbsp;
+@if (FutterId >= 0)
+{
+    <button type="button" class="btn btn-primary" @onclick="Delete">Löschen</button>
+
+}
+
+@code {
+    [Parameter]
+    public int FutterautomatId { get; set; } = -1;
+
+    [Parameter]
+    public int FutterId { get; set; }
+
+    public string Name { get; set; }
+    public float Packungsinhalt { get; set; }
+    public string Beschreibung { get; set; }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Futter futter;
+            if (FutterId > 0)
+            {
+                futter = FutterautomatenEFCoreRepository.GetFutter(FutterId);
+                Name = futter.FutterName;
+                Packungsinhalt = futter.Packungsinhalt;
+                Beschreibung = futter.Beschreibung;
+                StateHasChanged();
+            }
+        }
+
+
+    }
+
+    private void Save()
+    {
+        if (FutterId > 0)
+        {
+            var futter = FutterautomatenEFCoreRepository.GetFutter(FutterId);
+            futter.FutterName = this.Name;
+            futter.Packungsinhalt = this.Packungsinhalt;
+            futter.Beschreibung = this.Beschreibung;
+            FutterautomatenEFCoreRepository.UpdateFutter(futter);
+            if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
+            navigationManager.NavigateTo("/");
+        }
+        if (FutterId <= 0)
+        {
+            var futter = new Futter()
+                {
+                    FutterName = this.Name,
+                    Packungsinhalt = this.Packungsinhalt,
+                    Beschreibung = this.Beschreibung
+                };
+            FutterautomatenEFCoreRepository.AddFutter(futter);
+        }
+        navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
+    }
+    private void Delete()
+    {
+        FutterautomatenEFCoreRepository.DeleteFutter(FutterId);
+    }
+
+}
