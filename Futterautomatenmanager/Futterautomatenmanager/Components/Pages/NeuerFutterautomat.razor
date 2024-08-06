@@ -32,15 +32,30 @@
     </div>
     <br />
     <div class="form-group">
+        <label for="ControlFuetterungen">Fütterungen</label>
+        @if (fuetterungen is not null && fuetterungen.Count > 0)
+        {
+            <select class="form-control" id="ControlFuetterungen" @onchange="OnFuetterungSelected">
+                @foreach (var fuetterung in fuetterungen)
+                {
+                    <option value="@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")">@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")</option>
+                }
+            </select>
+        }
+        <br />
+        <a class="btn btn-primary" @onclick="NeueFuetterungErstellen">Neue Fütterung</a>
+    </div>
+    <br />
+    <div class="form-group">
         <label for="faktorFuetterungen">Faktor Fütterungen</label>
         <input type="number" class="form-control" id="faktorFuetterungen" @bind="FaktorFuetterungen">
     </div>
     <br />
     <div class="form-group">
-        <label for="ControlSelect2">Aquarium</label>
+        <label for="ControlAquarium">Aquarium</label>
         @if (aquarien is not null && aquarien.Count > 0)
         {
-            <select class="form-control" id="ControlSelect2" @onchange="OnAquariumSelected">
+            <select class="form-control" id="ControlAquarium" @onchange="OnAquariumSelected">
                 @foreach (var aquarium in aquarien)
                 {
                     <option value="@aquarium.Name">@aquarium.Name</option>
@@ -55,7 +70,7 @@
 
 
     <br /><br />
-    <button type="button" class="btn-primary" @onclick="Save">Speichern</button>
+    <button type="button" class="btn-primary" @onclick="() => Speichern()">Speichern</button>
 </form>
 
 @code {
@@ -68,6 +83,7 @@
 
     string ausgewaehltesAquarium = string.Empty;
     string ausgewaehltesFutter = string.Empty;
+    string ausgewaehlteFuetterung = string.Empty;
 
     public float FaktorFuetterungen { get; set; } = 1;
 
@@ -75,6 +91,7 @@
 
     private List<Aquarium>? aquarien;
     private List<Futter>? futterArten;
+    private List<Fuetterung>? fuetterungen;
 
     protected override void OnAfterRender(bool firstRender)
     {
@@ -85,7 +102,9 @@
             if (aquarien is not null) ausgewaehltesAquarium = aquarien.First().Name;
             futterArten = FutterautomatenEFCoreRepository.GetFutter();
             if (futterArten is not null) ausgewaehltesFutter = futterArten.First().FutterName;
-            ausgewaehltesAquarium = aquarien.First().Name;
+            fuetterungen = FutterautomatenEFCoreRepository.GetFuetterungen();
+            if (fuetterungen is not null) ausgewaehlteFuetterung = $"{fuetterungen.First().Tag}, {fuetterungen.First().Uhrzeit}";
+
 
             if (FutterautomatId > 0)
             {
@@ -100,20 +119,37 @@
 
     private void NeuesAquarium()
     {
-        if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuesaquarium/{FutterautomatId}");
+        // if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuesaquarium/{FutterautomatId}");
+        if (FutterautomatId > 0) Speichern($"/neuesaquarium/{FutterautomatId}");
+    }
+    private void NeueFuetterungErstellen()
+    {
+        //navigationManager.NavigateTo($"/neuefuetterung/{FutterautomatId}");
+        if (FutterautomatId > 0) Speichern($"/neuefuetterung/{FutterautomatId}");
+    }
+    private void NeuesFutterErstellen()
+    {
+
+        //navigationManager.NavigateTo($"/neuesfutter/{FutterautomatId}");
+        if (FutterautomatId > 0) Speichern($"/neuesfutter/{FutterautomatId}");
     }
     private void OnAquariumSelected(ChangeEventArgs e)
     {
         ausgewaehltesAquarium = e.Value.ToString();
     }
 
+
     private void OnFutterSelected(ChangeEventArgs e)
     {
         ausgewaehltesFutter = e.Value.ToString();
     }
+    private void OnFuetterungSelected(ChangeEventArgs e)
+    {
+        ausgewaehlteFuetterung = e.Value.ToString();
+    }
 
     //Speichern / Aktualisieren Futterautomat
-    private void Save()
+    private void Speichern(string navLink="/")
     {
         if (FutterautomatId > 0)
         {
@@ -121,7 +157,6 @@
                 {
                     Bezeichnung = BezeichnungFutterautomat,
                     FutterFaktor = FaktorFuetterungen,
-                    //Fuetterungen = ?;
                 };
 
             FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, neuerFutterautomat);
@@ -129,7 +164,7 @@
             UpdateAquarium();
             UpdateFutter();
         }
-        navigationManager.NavigateTo("/");
+        navigationManager.NavigateTo(navLink);
     }
 
 
@@ -157,6 +192,14 @@
             FutterautomatenEFCoreRepository.UpdateFutter(futter);
         }
     }
+    private void UpdateFuetterungen()
+    {
+        if (ausgewaehlteFuetterung != "")
+        {
+
+        }
+    }
+
 
     private void UpdateFutterautomat(Futterautomat futterautomat)
     {
@@ -164,11 +207,7 @@
         FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
     }
 
-    private void NeuesFutterErstellen()
-    {
 
-        navigationManager.NavigateTo($"/neuesfutter/{FutterautomatId}");
-    }
 
 
 }

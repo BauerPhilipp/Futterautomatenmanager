@@ -31,9 +31,22 @@ namespace FutterautomatenDatenbank.Models
             return db.Fuetterungen.ToList();
         }
 
-        public void UpdateFuetterung(int id, Fuetterung fuetterung)
+        public void UpdateFuetterung(Fuetterung fuetterung)
         {
-            throw new NotImplementedException();
+            if (fuetterung == null) throw new ArgumentException(nameof(fuetterung));
+
+            using var db = this.contextFactory.CreateDbContext();
+
+            var fuetterungToUpdate = db.Fuetterungen.Find(fuetterung.FuetterungId);
+
+            if (fuetterungToUpdate is not null)
+            {
+                fuetterungToUpdate.Futtermenge = fuetterung.Futtermenge;
+                fuetterungToUpdate.Futterautomat = fuetterung.Futterautomat;
+                fuetterungToUpdate.Tag = fuetterung.Tag;
+                fuetterungToUpdate.Uhrzeit = fuetterung.Uhrzeit;
+                db.SaveChanges();
+            }
         }
 
         public void DeleteFuetterung(int id)

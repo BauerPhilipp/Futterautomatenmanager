@@ -1,0 +1,82 @@
+﻿@page "/neuefuetterung/{FutterautomatId:int}"
+@page "/neuefuetterung/update/{FuetterungId:int}"
+@rendermode InteractiveServer
+
+@using FutterautomatenDatenbank.Models
+@inject IFutterautomatenEFCoreRepository futterautomatenEFCoreRepository
+@inject NavigationManager navigationManager
+
+
+<h3>NeueFuetterung</h3>
+
+<form>
+    <div class="form-group">
+        <label for="Datum">Datum</label>
+        <input type="date" class="form-control" id="Datum" style="width:auto; height:70px" @bind="Datum">
+    </div>
+    <div class="form-group">
+        <label for="Uhrzeit">Uhrzeit</label>
+        <input type="time" class="form-control" id="Uhrzeit" style="width:auto; height:70px" @bind="Uhrzeit">
+    </div>
+    <div class="form-group">
+        <label for="Futtermenge">Futtermenge in gramm</label>
+        <input type="number" class="form-control" id="Futtermenge" style="width:50%" @bind="FutterMenge">
+    </div>
+</form>
+
+<br />
+<button type="button" class="btn btn-primary" @onclick="Speichern">Speichern</button>
+<br />
+@if (isFehler)
+{
+    <div class="row">
+        <div class="col-12">
+            <textarea style="color:red; width:100%; height:300px;">@fehlerLabel</textarea>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int FutterautomatId { get; set; }
+
+    [Parameter]
+    public int FuetterungId { get; set; }
+
+    public DateOnly Datum { get; set; } = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
+
+    public TimeOnly Uhrzeit { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
+
+    public int FutterMenge { get; set; } = 0;
+
+    private string fehlerLabel = string.Empty;
+    private bool isFehler = false;
+
+    public void Speichern()
+    {
+        if (Datum <= DateOnly.FromDateTime(DateTime.Now.AddMinutes(1)) || FutterMenge < 1)
+        {
+            isFehler = true;
+            fehlerLabel = "Fehler bei Datum oder Futtermenge";
+            return;
+        };
+
+        var fuetterung = new Fuetterung()
+            {
+                Tag = Datum,
+                Uhrzeit = this.Uhrzeit,
+                Futtermenge = this.FutterMenge                
+            };
+
+
+        futterautomatenEFCoreRepository.AddFuetterung(fuetterung);
+        fuetterung = futterautomatenEFCoreRepository.GetFuetterungen().Last();
+        fuetterung.Futterautomat = futterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+        futterautomatenEFCoreRepository.UpdateFuetterung(fuetterung);
+
+
+
+        navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
+    }
+
+}

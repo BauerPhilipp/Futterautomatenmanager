@@ -29,7 +29,7 @@ namespace FutterautomatenDatenbank.Models
         void AddFuetterung(Fuetterung fuetterung);
         Fuetterung GetFuetterung(int id);
         List<Fuetterung> GetFuetterungen();
-        void UpdateFuetterung(int id, Fuetterung fuetterung);
+        void UpdateFuetterung(Fuetterung fuetterung);
         void DeleteFuetterung(int id);
 
         //Futterart
