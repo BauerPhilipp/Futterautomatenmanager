@@ -76,9 +76,9 @@
         {
             var futter = new Futter()
                 {
-                    FutterName = this.Name,
+                    FutterName = this.Name ?? "",
                     Packungsinhalt = this.Packungsinhalt,
-                    Beschreibung = this.Beschreibung
+                    Beschreibung = this.Beschreibung ?? ""
                 };
             FutterautomatenEFCoreRepository.AddFutter(futter);
         }

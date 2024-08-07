@@ -38,7 +38,7 @@
             <select class="form-control" id="ControlFuetterungen" @onchange="OnFuetterungSelected">
                 @foreach (var fuetterung in fuetterungen)
                 {
-                    <option value="@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")">@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")</option>
+                    <option value="@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")">@($"{fuetterung.Tag}, {fuetterung.Uhrzeit},Futterautomat: {fuetterung.Futterautomat.Bezeichnung}")</option>
                 }
             </select>
         }
@@ -99,11 +99,14 @@
         {
             //Initialisere Listen
             aquarien = FutterautomatenEFCoreRepository.GetAquarien().LastElementFirst();
-            if (aquarien is not null) ausgewaehltesAquarium = aquarien.First().Name;
+            if (aquarien is not null && aquarien.Count > 0)
+                ausgewaehltesAquarium = aquarien.First().Name;
             futterArten = FutterautomatenEFCoreRepository.GetFutter().LastElementFirst();
-            if (futterArten is not null) ausgewaehltesFutter = futterArten.First().FutterName;
+            if (futterArten is not null && futterArten.Count > 0)
+                ausgewaehltesFutter = futterArten.First().FutterName;
             fuetterungen = FutterautomatenEFCoreRepository.GetFuetterungen().LastElementFirst();
-            if (fuetterungen is not null) ausgewaehlteFuetterung = $"{fuetterungen.First().Tag}, {fuetterungen.First().Uhrzeit}";
+            if (fuetterungen is not null && fuetterungen.Count > 0)
+                ausgewaehlteFuetterung = $"{fuetterungen.First().Tag}, {fuetterungen.First().Uhrzeit}";
 
 
             if (FutterautomatId > 0)
@@ -149,7 +152,7 @@
     }
 
     //Speichern / Aktualisieren Futterautomat
-    private void Speichern(string navLink="/")
+    private void Speichern(string navLink = "/")
     {
         if (FutterautomatId > 0)
         {
@@ -159,7 +162,6 @@
                     FutterFaktor = FaktorFuetterungen,
                 };
 
-            FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, neuerFutterautomat);
             UpdateFutterautomat(neuerFutterautomat);
             UpdateAquarium();
             UpdateFutter();
@@ -172,20 +174,20 @@
     private void UpdateAquarium()
     {
         Aquarium aquarium;
-        if(ausgewaehltesAquarium != "")
+        if (ausgewaehltesAquarium != "")
         {
 
             aquarium = FutterautomatenEFCoreRepository.GetAquarien().First(a => a.Name == ausgewaehltesAquarium);
             var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
             aquarium.Futterautomaten.Add(futterautomat);
 
-            FutterautomatenEFCoreRepository.UpdateAquarium(aquarium);  
+            FutterautomatenEFCoreRepository.UpdateAquarium(aquarium);
         }
     }
     private void UpdateFutter()
     {
         Futter futter;
-        if(ausgewaehltesFutter != "")
+        if (ausgewaehltesFutter != "")
         {
             futter = FutterautomatenEFCoreRepository.GetFutter().First(a => a.FutterName == ausgewaehltesFutter);
             var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
@@ -203,9 +205,16 @@
                 return ausgewaehlteFuetterung == vergleich;
             });
 
-            fuetterung.Futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
-            FutterautomatenEFCoreRepository.UpdateFuetterung(fuetterung);
+            var fuetterungNeu = new Fuetterung()
+                {
+                    FuetterungId = fuetterung.FuetterungId,
+                    Futtermenge = fuetterung.Futtermenge,
+                    Tag = fuetterung.Tag,
+                    Uhrzeit = fuetterung.Uhrzeit,
+                };
 
+            // fuetterung.Futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+            FutterautomatenEFCoreRepository.UpdateFuetterung(fuetterungNeu);
         }
     }
 

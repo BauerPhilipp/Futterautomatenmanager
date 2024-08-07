@@ -28,7 +28,8 @@ namespace FutterautomatenDatenbank.Models
         public List<Fuetterung> GetFuetterungen()
         {
             using var db = contextFactory.CreateDbContext();
-            return db.Fuetterungen.ToList();
+            return db.Fuetterungen.Include(p => p.Futterautomat).ToList();
+            //return db.Fuetterungen.ToList();
         }
 
         public void UpdateFuetterung(Fuetterung fuetterung)

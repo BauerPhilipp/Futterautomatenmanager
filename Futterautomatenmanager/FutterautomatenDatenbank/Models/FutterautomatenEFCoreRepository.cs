@@ -32,6 +32,13 @@ namespace FutterautomatenDatenbank.Models
             var futterautomat = db.Futterautomaten.Find(id);
             if (futterautomat is null) return;
 
+            //löschen der Fütterungen bevor der Futterautomat gelöscht werden kann
+            var fuetterungenToRemove = db.Fuetterungen.Where(f => f.Futterautomat.FutterautomatId == id);
+            foreach (var fuetterung in fuetterungenToRemove)
+            {
+                db.Fuetterungen.Remove(fuetterung);
+            }
+
             db.Futterautomaten.Remove(futterautomat);
 
             db.SaveChanges();
