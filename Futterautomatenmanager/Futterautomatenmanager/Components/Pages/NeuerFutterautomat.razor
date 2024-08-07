@@ -163,6 +163,7 @@
             UpdateFutterautomat(neuerFutterautomat);
             UpdateAquarium();
             UpdateFutter();
+            UpdateFuetterungen();
         }
         navigationManager.NavigateTo(navLink);
     }
@@ -196,6 +197,14 @@
     {
         if (ausgewaehlteFuetterung != "")
         {
+            var fuetterung = FutterautomatenEFCoreRepository.GetFuetterungen().First(f =>
+            {
+                string vergleich = $"{f.Tag}, {f.Uhrzeit}";
+                return ausgewaehlteFuetterung == vergleich;
+            });
+
+            fuetterung.Futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+            FutterautomatenEFCoreRepository.UpdateFuetterung(fuetterung);
 
         }
     }
