@@ -98,11 +98,11 @@
         if (firstRender)
         {
             //Initialisere Listen
-            aquarien = FutterautomatenEFCoreRepository.GetAquarien();
+            aquarien = FutterautomatenEFCoreRepository.GetAquarien().LastElementFirst();
             if (aquarien is not null) ausgewaehltesAquarium = aquarien.First().Name;
-            futterArten = FutterautomatenEFCoreRepository.GetFutter();
+            futterArten = FutterautomatenEFCoreRepository.GetFutter().LastElementFirst();
             if (futterArten is not null) ausgewaehltesFutter = futterArten.First().FutterName;
-            fuetterungen = FutterautomatenEFCoreRepository.GetFuetterungen();
+            fuetterungen = FutterautomatenEFCoreRepository.GetFuetterungen().LastElementFirst();
             if (fuetterungen is not null) ausgewaehlteFuetterung = $"{fuetterungen.First().Tag}, {fuetterungen.First().Uhrzeit}";
 
 
