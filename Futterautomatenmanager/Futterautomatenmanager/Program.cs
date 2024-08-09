@@ -24,6 +24,7 @@ namespace Futterautomatenmanager
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
             builder.Services.AddTransient<IFutterautomatenEFCoreRepository, FutterautomatenEFCoreRepository>();
+            builder.Services.AddControllers();
 
             builder.Services.AddAuthentication(options =>
                 {
@@ -68,6 +69,8 @@ namespace Futterautomatenmanager
 
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
+
+            app.MapControllers();
 
             // Add additional endpoints required by the Identity /Account Razor components.
             app.MapAdditionalIdentityEndpoints();
