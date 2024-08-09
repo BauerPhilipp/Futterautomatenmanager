@@ -1,4 +1,6 @@
-﻿using FutterautomatenDatenbank.Models;
+﻿using FutterautomatenDatenbank.Migrations;
+using FutterautomatenDatenbank.Models;
+using Futterautomatenmanager.Models.APIModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Futterautomatenmanager.Controllers
@@ -18,11 +20,29 @@ namespace Futterautomatenmanager.Controllers
         public IActionResult GetAllFutterautomaten()
         {
             var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten().First();
+            ////Fehlerhaft da die Objekte sich immer gegenseitig referenzieren!
+            //var output = new Futterautomat()
+            //{
+            //    FutterautomatId = futterautomat.FutterautomatId,
+            //    Aquarium = futterautomat.Aquarium,
+            //    Bezeichnung = futterautomat.Bezeichnung,
+            //    Fuetterungen = futterautomat.Fuetterungen,
+            //    Futter = futterautomat.Futter,
+            //    FutterFaktor = futterautomat.FutterFaktor,
+            //    Person = futterautomat.Person,
+            //};
+            var output = new FutterautomatwerteForAPI(futterautomat);
 
-            var output = new Futterautomat()
-            {
-                Aquarium = new Aquarium() { Name = "nicht aus Datenbank"}
-            };
+            return Ok(output);
+        }
+
+        [HttpGet("{bezeichnungFutterautomat}")]
+        public IActionResult GetFutterautomaten(string bezeichnungFutterautomat)
+        {
+
+            var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten()
+                .Where(f => f.Bezeichnung == bezeichnungFutterautomat).FirstOrDefault();
+            var output = new FutterautomatwerteForAPI(futterautomat);
 
             return Ok(output);
         }
