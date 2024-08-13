@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
+    /// <summary>
+    /// Zur Planung von Fütterungszeiten des jeweiligen Futterautomaten
+    /// </summary>
     public class Fuetterung
     {
         public int FuetterungId { get; set; }

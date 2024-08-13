@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Context
 {
+    /// <summary>
+    /// Context für den Zugriff auf die Datenbanktabellen
+    /// </summary>
     public class FutterautomatenContext : DbContext
     {
         public FutterautomatenContext(DbContextOptions<FutterautomatenContext> options) : base(options) { }

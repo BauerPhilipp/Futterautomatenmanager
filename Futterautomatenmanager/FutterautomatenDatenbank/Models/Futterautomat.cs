@@ -7,10 +7,15 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
+    /// <summary>
+    /// Der Futterautomat kümmert sich um die Fütterung der Fische
+    /// </summary>
     public class Futterautomat
     {
         public int FutterautomatId { get; set; }
-        // Zum korrekten einstellen der Futtermenge
+        /// <summary>
+        /// Der Futterfaktor dient zur empirischen Einstellung der Futtermenge bei jeder Fütterung
+        /// </summary>
         public float FutterFaktor { get; set; } = 1f;
 
         public string Bezeichnung { get; set; } = string.Empty;

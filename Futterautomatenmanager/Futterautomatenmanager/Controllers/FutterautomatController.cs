@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Futterautomatenmanager.Controllers
 {
+    /// <summary>
+    /// API für die abfrage von Futterautomaten.
+    /// </summary>
     [ApiController]
     [Route("/api/[controller]")]
     public class FutterautomatController : ControllerBase
@@ -15,7 +18,10 @@ namespace Futterautomatenmanager.Controllers
         {
             this.FutterautomatenEFCoreRepository = FutterautomatenEFCoreRepository;
         }
-
+        /// <summary>
+        /// Gibt alle verfügbaren Futterautomaten als Json aus.
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAllFutterautomaten()
         {
@@ -36,6 +42,11 @@ namespace Futterautomatenmanager.Controllers
             return Ok(output);
         }
 
+        /// <summary>
+        /// Ausgabe eines ausgewählten Futterautomaten
+        /// </summary>
+        /// <param name="bezeichnungFutterautomat">Der Name des Futterautomaten welcher in der App festgelegt wurde</param>
+        /// <returns></returns>
         [HttpGet("{bezeichnungFutterautomat}")]
         public IActionResult GetFutterautomaten(string bezeichnungFutterautomat)
         {

@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
+    /// <summary>
+    /// In einem Aquarium werden diverse Futterautomaten integriert
+    /// </summary>
     public class Aquarium
     {
         public int AquariumId { get; set; }

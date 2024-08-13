@@ -7,10 +7,17 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
+    /// <summary>
+    /// Futter mit Packungsinhalt.
+    /// Der Packungsinhalt kann für die Berechnung der Restmenge an Futter im Futterautomaten verwendet werden.
+    /// </summary>
     public class Futter
     {
         public int FutterId { get; set; }
 
+        /// <summary>
+        /// Angabe sollte in Gramm erfolgen
+        /// </summary>
         [Required]
         public float Packungsinhalt { get; set; }
         public string FutterName { get; set; } = string.Empty;

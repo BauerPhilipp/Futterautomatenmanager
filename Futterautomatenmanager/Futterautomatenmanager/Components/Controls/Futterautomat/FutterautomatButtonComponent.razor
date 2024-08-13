@@ -6,18 +6,29 @@
 <button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color; height:100px; width:200px">Futterautomat<br />@Bezeichnung</button>
 
 @code {
+    /// <summary>
+    /// Die Id wird von dem Elternelement and das Kindelement übergeben
+    /// </summary>
     [CascadingParameter(Name = "FutterautomatId")]
     public int Id { get; set; }
-
+    /// <summary>
+    /// Bezeichnung des Futterautomaten
+    /// </summary>
     public string Bezeichnung { get; set; } = "NoName";
-
+    /// <summary>
+    /// Farbe der Schrift des Buttons
+    /// </summary>
     private string color = "black";
 
+    /// <summary>
+    /// Beim Klicken wird zur Seite /neuerfutterautomat/update/{Id} navigiert
+    /// </summary>
     private void OnButtonClicked()
     {
 
         navigationManager.NavigateTo($"/neuerfutterautomat/update/{Id}");
         Console.WriteLine($"Button wurde geklickt!");
+        // TODO: Löschen
         color = "white";
     }
 

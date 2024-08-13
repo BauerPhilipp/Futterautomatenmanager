@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
+    //Stellt den Benutzer des Futterautomaten dar
     public class Person
     {
         public int PersonId { get; set; }

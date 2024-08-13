@@ -1,6 +1,10 @@
 ﻿
 namespace FutterautomatenDatenbank.Models
 {
+    /// <summary>
+    /// Stellt diverse Methoden zum abfragen, updaten und hinzufügen von Elementen in die Datenbank
+    /// zur ferfügung
+    /// </summary>
     public interface IFutterautomatenEFCoreRepository
     {
         //Futterautomaten

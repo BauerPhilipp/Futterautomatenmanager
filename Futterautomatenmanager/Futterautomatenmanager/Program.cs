@@ -13,18 +13,20 @@ namespace Futterautomatenmanager
     {
         public static void Main(string[] args)
         {
+            //Kontainer für DI elemente
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            //.AddInteractiveServerComponents() ermöglicht Interactivität mit dem Server über SignalR
             builder.Services.AddRazorComponents()
                 .AddInteractiveServerComponents();
 
+            //Notwendig für die Authentifizierung
             builder.Services.AddCascadingAuthenticationState();
             builder.Services.AddScoped<IdentityUserAccessor>();
             builder.Services.AddScoped<IdentityRedirectManager>();
             builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
-            builder.Services.AddTransient<IFutterautomatenEFCoreRepository, FutterautomatenEFCoreRepository>();
-            builder.Services.AddControllers();
+            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
+
 
             builder.Services.AddAuthentication(options =>
                 {
@@ -33,6 +35,8 @@ namespace Futterautomatenmanager
                 })
                 .AddIdentityCookies();
 
+
+            //abgreifen des Connectionstrings aus appsettings.json
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(connectionString));
@@ -43,10 +47,14 @@ namespace Futterautomatenmanager
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
 
+            //Für die FutterautomatController API
+            builder.Services.AddControllers();
+
+            //FutterautomatenDatenbankspeicherort und das Interface beim Servise registrieren. 
             builder.Services.AddDbContextFactory<FutterautomatenContext>(options => options.UseSqlite(
                 builder.Configuration.GetConnectionString("FutterautomatenDatenbankConnection")));
+            builder.Services.AddTransient<IFutterautomatenEFCoreRepository, FutterautomatenEFCoreRepository>();
 
-            builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
             var app = builder.Build();
 
@@ -67,9 +75,11 @@ namespace Futterautomatenmanager
             app.UseStaticFiles();
             app.UseAntiforgery();
 
+            //.AddInteractiveServerRenderMode() ermöglicht Interactivität mit dem Server über SignalR
             app.MapRazorComponents<App>()
                 .AddInteractiveServerRenderMode();
 
+            //Für die FutterautomatController API
             app.MapControllers();
 
             // Add additional endpoints required by the Identity /Account Razor components.
