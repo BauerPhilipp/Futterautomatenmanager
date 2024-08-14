@@ -109,6 +109,7 @@
     display: block;
 }
 
+/*641 war standard*/
 @media (min-width: 641px) {
     .navbar-toggler {
         display: none;

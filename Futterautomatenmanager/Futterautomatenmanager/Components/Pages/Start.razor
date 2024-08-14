@@ -15,9 +15,9 @@
 
 <h3>Start</h3>
 
-@if (Futterautomaten is not null)
+@* @if (Futterautomaten is not null)
 {
-    @foreach (var automat in Futterautomaten)
+    foreach (var automat in Futterautomaten)
     {
         <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
             <FutterautomatComponent></FutterautomatComponent>
@@ -29,7 +29,38 @@
 else
 {
     <p>Kein Futterautomat vorhanden?</p>
-}
+} *@
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Futterautomat</th>
+            <th scope="col">Daten</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        
+            @if (Futterautomaten is not null)
+            {
+                foreach (var automat in Futterautomaten)
+                {
+                <tr>
+                    <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
+                        <FutterautomatComponent></FutterautomatComponent>
+                        <br />
+                    </CascadingValue>
+                </tr>
+                }
+            }
+            else
+            {
+                <p>Kein Futterautomat vorhanden?</p>
+            }
+        
+    </tbody>
+</table>
+
 
 
 <br />
