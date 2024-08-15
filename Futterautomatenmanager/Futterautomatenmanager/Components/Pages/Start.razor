@@ -15,22 +15,6 @@
 
 <h3>Start</h3>
 
-@* @if (Futterautomaten is not null)
-{
-    foreach (var automat in Futterautomaten)
-    {
-        <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
-            <FutterautomatComponent></FutterautomatComponent>
-            <br />
-        </CascadingValue>
-    }
-
-}
-else
-{
-    <p>Kein Futterautomat vorhanden?</p>
-} *@
-
 <table class="table table-striped">
     <thead>
         <tr>
@@ -65,15 +49,19 @@ else
 
 <br />
 <br />
-@if(person is not null)
-{
-    <button class="btn btn-secondary" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
-    <text>&nbsp</text>
-}else
-{
-    <label>Keine Person angemeldet</label>
-}
-<button type="button" class="btn btn-secondary" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
+<div class="d-flex justify-content-around">
+    @if (person is not null)
+    {
+        <button class="btn btn-success" @onclick="OnCreateButtonClicked">Neuen Futterautomaten erstellen</button>
+        <text>&nbsp</text>
+    }
+    else
+    {
+        <label>Keine Person angemeldet</label>
+    }
+    <button type="button" class="btn btn-danger" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
+</div>
+
 
 
 

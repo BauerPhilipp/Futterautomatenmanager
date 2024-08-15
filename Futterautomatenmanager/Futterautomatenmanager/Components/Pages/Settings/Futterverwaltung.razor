@@ -25,7 +25,7 @@
                     <td>
                         <button class="btn btn-primary" @onclick=@(()=>navigationManager.NavigateTo($"/neuesfutter/update/{f.FutterId}"))>Edit</button>
                     </td>                    <td>
-                        <button class="btn btn-primary" @onclick=@(() => DeleteFutter(f.FutterId))>Löschen</button>
+                        <button class="btn btn-danger" @onclick=@(() => DeleteFutter(f.FutterId))>Löschen</button>
                     </td>
                 </tr>
             }

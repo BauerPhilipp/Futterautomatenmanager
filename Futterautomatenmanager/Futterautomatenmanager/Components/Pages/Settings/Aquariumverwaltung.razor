@@ -26,7 +26,7 @@
                         <button class="btn btn-primary" @onclick=@(()=>navigationManager.NavigateTo($"/neuesaquarium/update/{a.AquariumId}"))>Edit</button>
                     </td>
                     <td>
-                        <button class="btn btn-primary" @onclick=@(() => DeleteAquarium(a.AquariumId))>Löschen</button>
+                        <button class="btn btn-danger" @onclick=@(() => DeleteAquarium(a.AquariumId))>Löschen</button>
                     </td>
                 </tr>
             }
@@ -36,7 +36,7 @@
 </table>
 
 <br />
-<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("/neuesfutter"))>Neues Futter</button>
+<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("/neuesaquarium"))>Neues Aquarium</button>
 
 
 

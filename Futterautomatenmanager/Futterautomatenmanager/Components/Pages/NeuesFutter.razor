@@ -8,7 +8,7 @@
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
 @inject NavigationManager navigationManager
 
-<h3>NeuesFutter</h3>
+<h3>@(FutterId > 0 ? "Futter Bearbeiten" : "Neues Futter")</h3>
 
 <div class="form-group">
     <label for="Name">Name</label>
@@ -24,11 +24,7 @@
 </div>
 <br />
 <button type="button" class="btn btn-primary" @onclick="Save">Speichern</button> &nbsp;
-@if (FutterId >= 0)
-{
-    <button type="button" class="btn btn-primary" @onclick="Delete">Löschen</button>
 
-}
 
 @code {
     [Parameter]

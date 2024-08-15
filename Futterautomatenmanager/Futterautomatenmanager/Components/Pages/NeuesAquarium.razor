@@ -9,7 +9,7 @@
 @using FutterautomatenDatenbank.Models
 @using System.Text
 
-<h3>NeuesAquarium</h3>
+<h3>Neues Aquarium</h3>
 
 <div class="form-group">
     <label for="Name">Name</label>
@@ -26,7 +26,7 @@
 
 <br />
 <br />
-<button type="button" @onclick="SaveData">Save</button>
+<button type="button" class="btn btn-primary" @onclick="SaveData">Save</button>
 <br />
 <br />
 @if (isFehler)
@@ -111,7 +111,7 @@
         }
         else
         {
-            navigationManager.NavigateTo($"/");
+            navigationManager.NavigateTo($"/aquariumverwaltung");
         }
     }
     private bool IsInputWrong(string aqauriumName)

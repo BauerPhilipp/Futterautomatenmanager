@@ -35,12 +35,24 @@
         <label for="ControlFuetterungen">Fütterungen</label>
         @if (fuetterungen is not null && fuetterungen.Count > 0)
         {
-            <select class="form-control" id="ControlFuetterungen" @onchange="OnFuetterungSelected">
-                @foreach (var fuetterung in fuetterungen)
-                {
-                    <option value="@($"{fuetterung.Tag}, {fuetterung.Uhrzeit}")">@($"{fuetterung.Tag}, {fuetterung.Uhrzeit},Futterautomat: {fuetterung.Futterautomat.Bezeichnung}")</option>
-                }
-            </select>
+            <table class="table table-striped">
+                <thead>
+                    <text>von diesem Futterautomaten</text>
+                </thead>
+                <tbody>
+                    @foreach (var fuetterung in fuetterungen.Where(f => f.Futterautomat.FutterautomatId == FutterautomatId))
+                    {
+                        <tr>
+                            <td>Tag: @fuetterung.Tag
+                            </td>
+                            <td>Uhrzeit: @fuetterung.Uhrzeit
+                            </td>
+                            <td>Futtermenge pro Fütterung: @fuetterung.Futtermenge Gramm
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         }
         <br />
         <a class="btn btn-primary" @onclick="NeueFuetterungErstellen">Neue Fütterung</a>
@@ -70,7 +82,11 @@
 
 
     <br /><br />
-    <button type="button" class="btn-primary" @onclick="() => Speichern()">Speichern</button>
+
+    <div class="d-flex justify-content-between">
+        <button type="button" class="btn-success" @onclick="() => Speichern()">Speichern</button>
+        <button type="button" class="btn-danger" @onclick="() => LoeschenFutterautomat()">Löschen</button>
+    </div>
 </form>
 
 @code {
@@ -223,6 +239,12 @@
     {
         futterautomat.FutterautomatId = FutterautomatId;
         FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
+    }
+
+    private void LoeschenFutterautomat()
+    {
+        FutterautomatenEFCoreRepository.DeleteFutterautomat(FutterautomatId);
+        navigationManager.NavigateTo("/");
     }
 
 

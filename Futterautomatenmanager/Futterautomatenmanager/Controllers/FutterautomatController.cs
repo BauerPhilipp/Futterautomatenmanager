@@ -25,7 +25,7 @@ namespace Futterautomatenmanager.Controllers
         [HttpGet]
         public IActionResult GetAllFutterautomaten()
         {
-            var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten().First();
+            var dbFutterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
             ////Fehlerhaft da die Objekte sich immer gegenseitig referenzieren!
             //var output = new Futterautomat()
             //{
@@ -37,9 +37,19 @@ namespace Futterautomatenmanager.Controllers
             //    FutterFaktor = futterautomat.FutterFaktor,
             //    Person = futterautomat.Person,
             //};
-            var output = new FutterautomatwerteForAPI(futterautomat);
 
-            return Ok(output);
+            List<FutterautomatwerteForAPI> futterautomaten = new List<FutterautomatwerteForAPI>();
+            if (dbFutterautomaten is null)
+            {
+                return BadRequest("Keine Futterautomaten vorhanden");
+            }
+            foreach (var automat in dbFutterautomaten)
+            {
+                var output = new FutterautomatwerteForAPI(automat);
+                futterautomaten.Add(output);
+            }
+
+            return Ok(futterautomaten);
         }
 
         /// <summary>
