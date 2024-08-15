@@ -56,6 +56,14 @@ namespace FutterautomatenDatenbank.Models
             var futter = db.FutterArt.Find(id);
             if (futter is null) return;
 
+            var futterautomat = db.Futterautomaten.Include(f => f.Futter);
+            foreach (var f in futterautomat)
+            {
+                if (f.Futter == futter)
+                {
+                    f.Futter = null;
+                }
+            }
             db.FutterArt.Remove(futter);
 
             db.SaveChanges();

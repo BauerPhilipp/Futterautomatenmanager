@@ -33,7 +33,6 @@ namespace FutterautomatenDatenbank.Models
         public void UpdateAquarium(Aquarium aquarium)
         {
 
-            // So funktioniert es
             if (aquarium == null) throw new ArgumentException(nameof(aquarium));
 
             using var db = this.contextFactory.CreateDbContext();

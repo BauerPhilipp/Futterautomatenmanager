@@ -61,6 +61,7 @@
 
     private void Save()
     {
+        //futter wird aktualisiert
         if (FutterId > 0)
         {
             var futter = FutterautomatenEFCoreRepository.GetFutter(FutterId);
@@ -68,9 +69,10 @@
             futter.Packungsinhalt = this.Packungsinhalt;
             futter.Beschreibung = this.Beschreibung;
             FutterautomatenEFCoreRepository.UpdateFutter(futter);
-            if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
-            navigationManager.NavigateTo("/");
+            navigationManager.NavigateTo("/futterverwaltung");
+            return;
         }
+        //neues Futter
         if (FutterId <= 0)
         {
             var futter = new Futter()
@@ -80,6 +82,12 @@
                     Beschreibung = this.Beschreibung ?? ""
                 };
             FutterautomatenEFCoreRepository.AddFutter(futter);
+        }
+        //Navigation nicht von einem Futterautomaten
+        if (FutterautomatId <= 0)
+        {
+            navigationManager.NavigateTo($"/futterverwaltung");
+            return;
         }
         navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
     }

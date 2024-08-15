@@ -1,0 +1,58 @@
+﻿@page "/aquariumverwaltung"
+
+@using FutterautomatenDatenbank.Models
+@rendermode InteractiveServer
+@inject IFutterautomatenEFCoreRepository futterautomatenEFCoreRepository
+@inject NavigationManager navigationManager
+
+
+
+<h3>Aquariumverwaltung</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+        </tr>
+    </thead>
+    <tbody>
+        @if (aquarien is not null && aquarien.Count > 0)
+        {
+            foreach (var a in aquarien)
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary">@a.Name</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick=@(()=>navigationManager.NavigateTo($"/neuesaquarium/update/{a.AquariumId}"))>Edit</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick=@(() => DeleteAquarium(a.AquariumId))>Löschen</button>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<br />
+<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("/neuesfutter"))>Neues Futter</button>
+
+
+
+
+@code {
+    List<Aquarium> aquarien;
+
+    protected override void OnInitialized()
+    {
+        aquarien = futterautomatenEFCoreRepository.GetAquarien();
+    }
+
+    private void DeleteAquarium(int aquariumId)
+    {
+        futterautomatenEFCoreRepository.DeleteAquarium(aquariumId);
+        aquarien = futterautomatenEFCoreRepository.GetAquarien();
+    }
+
+}

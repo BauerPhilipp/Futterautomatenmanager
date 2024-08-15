@@ -1,0 +1,57 @@
+﻿@page "/futterverwaltung"
+
+@using FutterautomatenDatenbank.Models
+@rendermode InteractiveServer
+@inject IFutterautomatenEFCoreRepository futterautomatenEFCoreRepository
+@inject NavigationManager navigationManager
+
+
+
+<h3>Futterverwaltung</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+        </tr>
+    </thead>
+    <tbody>
+        @if (futter is not null && futter.Count > 0)
+        {
+            foreach (var f in futter)
+            {
+                <tr>
+                    <td>
+                        <button class="btn btn-primary">@f.FutterName</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-primary" @onclick=@(()=>navigationManager.NavigateTo($"/neuesfutter/update/{f.FutterId}"))>Edit</button>
+                    </td>                    <td>
+                        <button class="btn btn-primary" @onclick=@(() => DeleteFutter(f.FutterId))>Löschen</button>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+<br />
+<button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("/neuesfutter"))>Neues Futter</button>
+
+
+
+
+@code {
+    List<Futter> futter;
+
+    protected override void OnInitialized()
+    {
+        futter = futterautomatenEFCoreRepository.GetFutter();
+    }
+
+    private void DeleteFutter(int futterId)
+    {
+        futterautomatenEFCoreRepository.DeleteFutter(futterId);
+        futter = futterautomatenEFCoreRepository.GetFutter();
+    }
+
+}

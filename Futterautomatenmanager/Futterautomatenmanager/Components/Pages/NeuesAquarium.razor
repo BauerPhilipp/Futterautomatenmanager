@@ -1,10 +1,11 @@
 ﻿@page "/neuesaquarium"
 @page "/neuesaquarium/{FutterautomatId:int}"
+@page "/neuesaquarium/update/{AquariumId:int}"
 
 @rendermode InteractiveServer
 
 @inject NavigationManager navigationManager
-@inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
+@inject IFutterautomatenEFCoreRepository futterautomatenEFCoreRepository
 @using FutterautomatenDatenbank.Models
 @using System.Text
 
@@ -41,6 +42,8 @@
 @code {
     [Parameter]
     public int FutterautomatId { get; set; } = -1;
+    [Parameter]
+    public int AquariumId { get; set; }
 
     private bool isFehler = false;
     private string fehlerLabel = string.Empty;
@@ -49,6 +52,22 @@
     private string Groesseße { get; set; } = string.Empty;
 
     Futterautomat? futterautomat;
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+        {
+            if (AquariumId > 0)
+            {
+                var aquarium = futterautomatenEFCoreRepository.GetAquarium(AquariumId);
+                Name = aquarium.Name;
+                Aufstellort = aquarium.Aufstellort;
+                Groesseße = aquarium.Groeße;
+                StateHasChanged();
+            }
+        }
+    }
+
 
     private void SaveData()
     {
@@ -59,33 +78,24 @@
             Groeße = this.Groesseße
         };
 
-        bool exists = FutterautomatenEFCoreRepository.GetAquarien().Any(a => a.Name == aquarium.Name);
+        if(IsInputWrong(aquarium.Name)) return;
 
-        if (aquarium.Name.Length < 1)
+        if (AquariumId > 0)
         {
-            fehlerLabel = "Kein Name angegeben!";
-            isFehler = true;
-            return;
-        }else if (exists)
-        {
-            var sb = new StringBuilder();
-            sb.AppendLine("Name bereits vorhanden!");
-            sb.AppendLine("Bereits vergebene Namen:");
-            foreach (var aq in FutterautomatenEFCoreRepository.GetAquarien())
-            {
-                sb.AppendLine($"{aq.Name},");
-            }
-            fehlerLabel = $"{sb.ToString()}";
-            isFehler = true;
+            aquarium.AquariumId = this.AquariumId;
+            aquarium.Name = this.Name;
+            aquarium.Aufstellort = this.Aufstellort;
+            aquarium.Groeße = this.Groesseße;
+            futterautomatenEFCoreRepository.UpdateAquarium(aquarium);
+            navigationManager.NavigateTo("/aquariumverwaltung");
             return;
         }
 
-        isFehler = false;
-        FutterautomatenEFCoreRepository.AddAquarium(aquarium);
+        futterautomatenEFCoreRepository.AddAquarium(aquarium);
 
         if(FutterautomatId > 0)
         {
-            this.futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
+            this.futterautomat = futterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId);
 
             Futterautomat futterautomat = new Futterautomat()
             {
@@ -96,7 +106,7 @@
                 FutterFaktor = this.futterautomat.FutterFaktor,
                 Person = this.futterautomat.Person
             };
-            FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
+            futterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
             navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
         }
         else
@@ -104,4 +114,31 @@
             navigationManager.NavigateTo($"/");
         }
     }
+    private bool IsInputWrong(string aqauriumName)
+    {
+        bool exists = futterautomatenEFCoreRepository.GetAquarien().Any(a => a.Name == aqauriumName);
+
+        if (aqauriumName.Length < 1)
+        {
+            fehlerLabel = "Kein Name angegeben!";
+            isFehler = true;
+            return true;
+        }
+        else if (exists && AquariumId <= 0)
+        {
+            var sb = new StringBuilder();
+            sb.AppendLine("Name bereits vorhanden!");
+            sb.AppendLine("Bereits vergebene Namen:");
+            foreach (var aq in futterautomatenEFCoreRepository.GetAquarien())
+            {
+                sb.AppendLine($"{aq.Name},");
+            }
+            fehlerLabel = $"{sb.ToString()}";
+            isFehler = true;
+            return true;
+        }
+        isFehler = false;
+        return false;
+    }
+
 }
