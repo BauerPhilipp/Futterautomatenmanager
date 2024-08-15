@@ -6,6 +6,7 @@ namespace Futterautomatenmanager.Models.APIModels
     {
         public string Datum { get; set; }
         public string Uhrzeit { get; set; }
+        public float futterMenge {  get; set; }
         /// <summary>
         /// Erstellt ein neues Objekt mit den Daten einer Fütterung
         /// </summary>
@@ -14,6 +15,7 @@ namespace Futterautomatenmanager.Models.APIModels
         {
             Datum = fuetterung.Tag.ToString();
             Uhrzeit = fuetterung.Uhrzeit.ToString();
+            futterMenge = fuetterung.Futtermenge;
         }
     }
 }
