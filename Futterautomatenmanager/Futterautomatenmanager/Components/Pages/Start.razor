@@ -24,24 +24,24 @@
         </tr>
     </thead>
     <tbody>
-        
-            @if (Futterautomaten is not null)
+
+        @if (Futterautomaten is not null)
+        {
+            foreach (var automat in Futterautomaten)
             {
-                foreach (var automat in Futterautomaten)
-                {
                 <tr>
                     <CascadingValue Name="FutterautomatId" Value="@automat.FutterautomatId">
                         <FutterautomatComponent></FutterautomatComponent>
                         <br />
                     </CascadingValue>
                 </tr>
-                }
             }
-            else
-            {
-                <p>Kein Futterautomat vorhanden?</p>
-            }
-        
+        }
+        else
+        {
+            <tr>Lade Futterautomaten......</tr>
+        }
+
     </tbody>
 </table>
 
@@ -69,7 +69,7 @@
 @code {
     string angemeldeterUser = string.Empty;
     public List<Futterautomat>? Futterautomaten;
-    Person? person; 
+    Person? person;
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -81,7 +81,7 @@
             angemeldeterUser = auth?.User?.Identity?.Name ?? "";
             if (!FutterautomatenEFCoreRepository.GetPersonen().Any(p => p.Name == angemeldeterUser))
             {
-                person = new Person() {Name = angemeldeterUser};
+                person = new Person() { Name = angemeldeterUser };
                 FutterautomatenEFCoreRepository.AddPerson(person);
             }
             else
@@ -99,14 +99,14 @@
 
         //Hiermit funktioniert die einfache erstellung eines Futterautomaten
         if (person is null) return;
-        Futterautomat futterautomat = new() { FutterFaktor = 1};
+        Futterautomat futterautomat = new() { FutterFaktor = 1 };
         FutterautomatenEFCoreRepository.AddFutterautomat(futterautomat);
         if (person.Futterautomaten is null)
         {
             person.Futterautomaten = new List<Futterautomat>();
-        } 
+        }
         person.Futterautomaten.Add(futterautomat);
-        var newPerson = new Person() {PersonId = person.PersonId, Name = person.Name, Futterautomaten = person.Futterautomaten};
+        var newPerson = new Person() { PersonId = person.PersonId, Name = person.Name, Futterautomaten = person.Futterautomaten };
         FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, newPerson);
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
