@@ -1,0 +1,40 @@
+Folgende Fragen habe ich für morgen bzw. kommende Woche (eilt eigentlich nicht)
+1.) Kommentare im Interface oder in der Implementierung oder in beiden?
+
+Im interface! in der Implementierung dan mit Ref.
+
+
+
+2.) Ist es möglich, sich im Debugging den schritt vor dem Fehler anzuzeigen, bzw. die Methode vor der fehlerhaften Methode?
+
+
+
+3.) Objekte kopieren ohne Referenz (Automapper?)
+
+
+
+4.) Bei der WebApi hatte ich ein Problem bei der Ausgabe, da
+die Elemente sich immer gegenseitig referenzieren. Ich habe die Ausgabewerte dann in ein neues Objekt geschrieben, um dies zu umgehen."public class FutterautomatController : ControllerBase" ist die betreffende Klasse.
+
+
+
+5.) //TODO: hat aus irgendeinem Grund nicht funktioniert. "FutterautomatButtonComponent.razor" ist die betreffende Komponente.
+
+
+6.) Fehler beim speichern.
+Wird eventuell die person als entitet übergeben?
+Eventuell davor nochmal SaveChanges();
+
+
+Fragen zu den Kommenden abgaben:
+1.) Die noch benötigten Dokumente sollen wie jene im Anhang aussehen?
+
+
+
+2.) Kann die technische Beschreibung aus meinen Kommentaren abgeleitet werden?
+
+
+
+3.) Benötigt die Powerpoint einen gewissen Aufbau? Vermute, es dient nur zur visuellen Unterstützung für die Erklärung meiner Software? 
+
+
