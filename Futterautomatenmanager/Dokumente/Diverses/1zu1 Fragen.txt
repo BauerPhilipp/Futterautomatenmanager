@@ -23,6 +23,7 @@ die Elemente sich immer gegenseitig referenzieren. Ich habe die Ausgabewerte dan
 
 6.) Fehler beim speichern.
 Wird eventuell die person als entitet übergeben?
+
 Eventuell davor nochmal SaveChanges();
 
 

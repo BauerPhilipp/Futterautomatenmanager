@@ -22,6 +22,7 @@ namespace FutterautomatenDatenbank.Models
 
         [Required]
         public TimeOnly Uhrzeit { get; set; }
+        public bool WiederholendeFuetterung { get; set; } = false;
 
         public virtual Futterautomat? Futterautomat { get; set; }
     }

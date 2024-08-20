@@ -46,6 +46,7 @@ namespace FutterautomatenDatenbank.Models
                 fuetterungToUpdate.Futterautomat = fuetterung.Futterautomat;
                 fuetterungToUpdate.Tag = fuetterung.Tag;
                 fuetterungToUpdate.Uhrzeit = fuetterung.Uhrzeit;
+                fuetterungToUpdate.WiederholendeFuetterung = fuetterung.WiederholendeFuetterung;
                 db.SaveChanges();
             }
         }

@@ -19,8 +19,13 @@
         <input type="time" class="form-control" id="Uhrzeit" style="width:auto; height:70px" @bind="Uhrzeit">
     </div>
     <div class="form-group">
-        <label for="Futtermenge">Futtermenge in gramm</label>
+        <label for="Futtermenge">Futtermenge in mm</label>
         <input type="number" class="form-control" id="Futtermenge" style="width:50%" @bind="FutterMenge">
+    </div>
+    <br />
+    <div class="form-group">
+        <input type="checkbox" class="form-check-input" id="Wiederholend" @bind="WiederholendeFuetterung">&nbsp;
+        <label for="Wiederholend">Wiederholende Fütterung</label>
     </div>
 </form>
 
@@ -47,6 +52,8 @@
 
     public TimeOnly Uhrzeit { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
 
+    public bool WiederholendeFuetterung { get; set; }
+
     public int FutterMenge { get; set; } = 0;
 
     private string fehlerLabel = string.Empty;
@@ -65,7 +72,8 @@
             {
                 Tag = Datum,
                 Uhrzeit = this.Uhrzeit,
-                Futtermenge = this.FutterMenge                
+                Futtermenge = this.FutterMenge,
+                WiederholendeFuetterung = this.WiederholendeFuetterung
             };
 
 

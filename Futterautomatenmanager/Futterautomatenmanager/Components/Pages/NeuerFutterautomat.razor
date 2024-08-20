@@ -47,7 +47,11 @@
                             </td>
                             <td>Uhrzeit: @fuetterung.Uhrzeit
                             </td>
-                            <td>Futtermenge pro Fütterung: @fuetterung.Futtermenge Gramm
+                            <td>Futtermenge pro Fütterung: @fuetterung.Futtermenge mm
+                            </td>
+                            <td> Wiederholende Fütterung: @(fuetterung.WiederholendeFuetterung ? "Ja" : "Nein" )
+                            </td>
+                            <td><button type="button" class="btn btn-danger" @onclick=@(() => FuetterungLoeschen(fuetterung.FuetterungId))>Löschen</button>
                             </td>
                         </tr>
                     }
@@ -181,7 +185,7 @@
             UpdateFutterautomat(neuerFutterautomat);
             UpdateAquarium();
             UpdateFutter();
-            UpdateFuetterungen();
+            //UpdateFuetterungen(); // TODO: nicht mehr notwendig da Visualisierung angepasst wurde
         }
         navigationManager.NavigateTo(navLink);
     }
@@ -247,7 +251,11 @@
         navigationManager.NavigateTo("/");
     }
 
-
+    public void FuetterungLoeschen(int fuetterungId)
+    {
+        FutterautomatenEFCoreRepository.DeleteFuetterung(fuetterungId);
+        fuetterungen = FutterautomatenEFCoreRepository.GetFuetterungen();
+    }
 
 
 }
