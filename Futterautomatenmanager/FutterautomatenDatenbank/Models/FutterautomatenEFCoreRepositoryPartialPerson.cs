@@ -63,7 +63,6 @@ namespace FutterautomatenDatenbank.Models
                 db.SaveChanges();
             }
         }
-
         /// <summary>
         /// Entfernt eine Person aus der Datenbank
         /// </summary>
@@ -81,3 +80,6 @@ namespace FutterautomatenDatenbank.Models
         }
     }
 }
+
+
+

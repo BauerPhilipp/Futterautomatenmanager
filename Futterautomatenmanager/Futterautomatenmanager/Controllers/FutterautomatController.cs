@@ -26,26 +26,24 @@ namespace Futterautomatenmanager.Controllers
         public IActionResult GetAllFutterautomaten()
         {
             var dbFutterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
-            ////Fehlerhaft da die Objekte sich immer gegenseitig referenzieren!
-            //var output = new Futterautomat()
-            //{
-            //    FutterautomatId = futterautomat.FutterautomatId,
-            //    Aquarium = futterautomat.Aquarium,
-            //    Bezeichnung = futterautomat.Bezeichnung,
-            //    Fuetterungen = futterautomat.Fuetterungen,
-            //    Futter = futterautomat.Futter,
-            //    FutterFaktor = futterautomat.FutterFaktor,
-            //    Person = futterautomat.Person,
-            //};
 
             List<FutterautomatwerteForAPI> futterautomaten = new List<FutterautomatwerteForAPI>();
             if (dbFutterautomaten is null)
             {
                 return BadRequest("Keine Futterautomaten vorhanden");
             }
+
             foreach (var automat in dbFutterautomaten)
             {
-                var output = new FutterautomatwerteForAPI(automat);
+                FutterautomatwerteForAPI output;
+                try
+                {
+                    output = new FutterautomatwerteForAPI(automat);
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest($"Fehler beim Einlesen der Futterautomaten. Ein benötiger Wert wurde nicht gesetzt! Fehler: {ex.Message}");
+                }
                 futterautomaten.Add(output);
             }
 
@@ -63,7 +61,15 @@ namespace Futterautomatenmanager.Controllers
 
             var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten()
                 .Where(f => f.Bezeichnung == bezeichnungFutterautomat).FirstOrDefault();
-            var output = new FutterautomatwerteForAPI(futterautomat);
+            FutterautomatwerteForAPI output;
+            try
+            {
+                output = new FutterautomatwerteForAPI(futterautomat);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Fehler beim Einlesen der Futterautomaten. Ein benötiger Wert wurde nicht gesetzt! Fehler: {ex.Message}");
+            }
 
             return Ok(output);
         }
