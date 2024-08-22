@@ -47,6 +47,7 @@ namespace Futterautomatenmanager
                 .AddSignInManager()
                 .AddDefaultTokenProviders();
 
+
             //Für die FutterautomatController API
             builder.Services.AddControllers();
 
@@ -68,6 +69,15 @@ namespace Futterautomatenmanager
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
+            }
+
+            //Damit die Migrationen automatisch ausgeführt werden
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate(); // Wendet alle ausstehenden Migrationen der Authentifizierung an
+                var dbFutterautomaten = scope.ServiceProvider.GetRequiredService<FutterautomatenContext>();
+                dbFutterautomaten.Database.Migrate();// Wendet alle ausstehenden Migrationen der Futterautomatendatenbank an
             }
 
             app.UseHttpsRedirection();
