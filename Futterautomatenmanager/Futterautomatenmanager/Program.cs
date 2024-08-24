@@ -74,10 +74,15 @@ namespace Futterautomatenmanager
             //Damit die Migrationen automatisch ausgeführt werden
             using (var scope = app.Services.CreateScope())
             {
+                // Wendet alle ausstehenden Migrationen der Authentifizierung an
                 var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                db.Database.Migrate(); // Wendet alle ausstehenden Migrationen der Authentifizierung an
+                if (db.Database.GetPendingMigrations().Any())
+                    db.Database.Migrate();
+
+                // Wendet alle ausstehenden Migrationen der Futterautomatendatenbank an
                 var dbFutterautomaten = scope.ServiceProvider.GetRequiredService<FutterautomatenContext>();
-                dbFutterautomaten.Database.Migrate();// Wendet alle ausstehenden Migrationen der Futterautomatendatenbank an
+                if (dbFutterautomaten.Database.GetPendingMigrations().Any())
+                    dbFutterautomaten.Database.Migrate();
             }
 
             app.UseHttpsRedirection();
