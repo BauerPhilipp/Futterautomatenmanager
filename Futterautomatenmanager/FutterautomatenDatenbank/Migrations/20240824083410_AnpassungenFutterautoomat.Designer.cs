@@ -3,6 +3,7 @@ using System;
 using FutterautomatenDatenbank.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FutterautomatenDatenbank.Migrations
 {
     [DbContext(typeof(FutterautomatenContext))]
-    partial class FutterautomatenContextModelSnapshot : ModelSnapshot
+    [Migration("20240824083410_AnpassungenFutterautoomat")]
+    partial class AnpassungenFutterautoomat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.7");
@@ -109,7 +112,7 @@ namespace FutterautomatenDatenbank.Migrations
                     b.Property<int?>("FutterId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<bool>("ManuelleFuetterung")
+                    b.Property<bool>("ManuelleFuetterungModus")
                         .HasColumnType("INTEGER");
 
                     b.Property<int?>("PersonId")

@@ -11,6 +11,7 @@ namespace Futterautomatenmanager.Models.APIModels
         public string futterName { get; set; }
         public string personName { get; set; }
         public string aquariumName { get; set; }
+        public bool ManuelleFuetterung { get; set; }
         public List<FuetterungForAPI> fuetterungen { get; set; }
 
         /// <summary>
@@ -25,6 +26,7 @@ namespace Futterautomatenmanager.Models.APIModels
             futterName = futterautomat.Futter.FutterName;
             personName = futterautomat.Person.Name;
             aquariumName = futterautomat.Aquarium.Name;
+            ManuelleFuetterung = futterautomat.ManuelleFuetterung;
 
             fuetterungen = new List<FuetterungForAPI>();
             foreach (var f in futterautomat.Fuetterungen)

@@ -3,7 +3,9 @@
 @inject NavigationManager navigationManager
 @inject IFutterautomatenEFCoreRepository FutterautomatenEFCoreRepository
 
-<button type="button" class="btn btn-primary" @onclick="OnButtonClicked" style="color:@color; height:100px; width:200px">Futterautomat<br />@Bezeichnung</button>
+<button type="button" class="@(manuelleFuetterung ? "btn btn-danger" : "btn btn-primary")" @onclick="OnButtonClicked" style="color:@color; height:100px; width:200px">
+    @(manuelleFuetterung ? "!Manuelle Fuetterung!" : "Futterautomat")<br />@Bezeichnung
+    </button>
 
 @code {
     /// <summary>
@@ -19,6 +21,8 @@
     /// Farbe der Schrift des Buttons
     /// </summary>
     private string color = "black";
+
+    private bool manuelleFuetterung = false;
 
     /// <summary>
     /// Beim Klicken wird zur Seite /neuerfutterautomat/update/{Id} navigiert
@@ -36,7 +40,9 @@
     {
         if (firstRender)
         {
-            Bezeichnung = FutterautomatenEFCoreRepository.GetFutterautomat(Id).Bezeichnung;
+            var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomat(Id);
+            Bezeichnung = futterautomat.Bezeichnung;
+            manuelleFuetterung = futterautomat.ManuelleFuetterung;
             StateHasChanged();
         }
     }

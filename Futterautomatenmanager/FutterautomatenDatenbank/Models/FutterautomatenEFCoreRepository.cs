@@ -77,6 +77,7 @@ namespace FutterautomatenDatenbank.Models
                 futterautomatToUpdate.Fuetterungen = futterautomat.Fuetterungen;
                 futterautomatToUpdate.Aquarium = futterautomat.Aquarium;
                 futterautomatToUpdate.Person = futterautomat.Person;
+                futterautomatToUpdate.ManuelleFuetterung = futterautomat.ManuelleFuetterung;
                 db.SaveChanges();
             }
         }
