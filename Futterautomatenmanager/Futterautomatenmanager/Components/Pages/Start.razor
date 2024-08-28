@@ -93,11 +93,11 @@
         person = FutterautomatenEFCoreRepository.GetPersonen().FirstOrDefault(p => p.Name == angemeldeterUser);
     }
 
+    /// <summary>
+    /// erstellt einen neuen Futterautomaten
+    /// </summary>
     private void OnCreateButtonClicked()
     {
-
-
-        //Hiermit funktioniert die einfache erstellung eines Futterautomaten
         if (person is null) return;
         Futterautomat futterautomat = new() { FutterFaktor = 1 };
         FutterautomatenEFCoreRepository.AddFutterautomat(futterautomat);
@@ -106,11 +106,13 @@
             person.Futterautomaten = new List<Futterautomat>();
         }
         person.Futterautomaten.Add(futterautomat);
-        var newPerson = new Person() { PersonId = person.PersonId, Name = person.Name, Futterautomaten = person.Futterautomaten };
-        FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, newPerson);
+        FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, NewPerson(person));
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
 
+    /// <summary>
+    /// Löscht alle bestehenden Futterautomaten
+    /// </summary>
     private void OnDeliteButtonClicked()
     {
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
@@ -122,9 +124,24 @@
             var person = futterautomat.Person;
             if (person is null) return;
             person.Futterautomaten.Remove(futterautomat);
-            FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, person);
+            FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, NewPerson(person));
         }
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
+    }
+
+    /// <summary>
+    /// Erzeugt eine neue Person ohne Datenbankreferenz, mit den Daten der übergebenen Person
+    /// </summary>
+    /// <param name="person"></param>
+    /// <returns></returns>
+    private Person NewPerson(Person person)
+    {
+        return new Person()
+        {
+            PersonId = person.PersonId,
+            Name = person.Name,
+            Futterautomaten = person.Futterautomaten
+        };
     }
 
 }

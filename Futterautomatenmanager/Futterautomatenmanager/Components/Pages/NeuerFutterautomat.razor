@@ -98,6 +98,15 @@
         <button type="button" class="btn-danger" @onclick="() => LoeschenFutterautomat()">Löschen</button>
     </div>
 </form>
+<br />
+@if (IsFehler)
+{
+    <div class="row">
+        <div class="col-12">
+            <textarea style="color:red; width:100%; height:300px;">@fehlerLabel</textarea>
+        </div>
+    </div>
+}
 
 @code {
     string s = "";
@@ -115,6 +124,9 @@
     public float FaktorFuetterungen { get; set; } = 1;
 
     public string BezeichnungFutterautomat { get; set; } = string.Empty;
+
+    private bool IsFehler { get; set; }
+    private string fehlerLabel = "Bezeichnung ist bereits vergeben!";
 
     private List<Aquarium>? aquarien;
     private List<Futter>? futterArten;
@@ -190,6 +202,15 @@
                     FutterFaktor = FaktorFuetterungen,
                     ManuelleFuetterung = this.ManuelleFuetterung
                 };
+
+            bool bezeichnungBereitsVergeben = FutterautomatenEFCoreRepository.GetFutterautomaten()
+            .Any(f => f.Bezeichnung.ToLower() == neuerFutterautomat.Bezeichnung.ToLower());
+
+            if (bezeichnungBereitsVergeben)
+            {
+                IsFehler = true;
+                return;
+            }
 
             UpdateFutterautomat(neuerFutterautomat);
             UpdateAquarium();

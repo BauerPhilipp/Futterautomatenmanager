@@ -37,12 +37,24 @@
 
 <br />
 <button class="btn btn-primary" @onclick=@(() => navigationManager.NavigateTo("/neuesaquarium"))>Neues Aquarium</button>
-
+@if (IsFehler)
+{
+    <div class="row">
+        <div class="col-12">
+            <textarea style="color:red; width:100%; height:300px;">@FehlerLabel</textarea>
+        </div>
+    </div>
+}
 
 
 
 @code {
+
     List<Aquarium> aquarien;
+
+    public bool IsFehler { get; set; }
+    string FehlerLabel = "Ein Futterautomat verweist noch auf dieses Aquarium!";
+
 
     protected override void OnInitialized()
     {
@@ -51,6 +63,13 @@
 
     private void DeleteAquarium(int aquariumId)
     {
+        bool isAquariumRef = futterautomatenEFCoreRepository.GetFutterautomaten().Any(f => f?.Aquarium?.AquariumId == aquariumId);
+
+        if (isAquariumRef)
+        {
+            IsFehler = true;
+            return;
+        }
         futterautomatenEFCoreRepository.DeleteAquarium(aquariumId);
         aquarien = futterautomatenEFCoreRepository.GetAquarien();
     }

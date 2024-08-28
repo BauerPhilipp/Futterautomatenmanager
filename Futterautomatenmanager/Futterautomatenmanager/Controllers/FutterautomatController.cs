@@ -42,7 +42,7 @@ namespace Futterautomatenmanager.Controllers
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest($"Fehler beim Einlesen der Futterautomaten. Ein benötiger Wert wurde nicht gesetzt! Fehler: {ex.Message}");
+                    return BadRequest($"Fehler beim Einlesen der Futterautomaten. Ein benötiger Wert wurde nicht gesetzt! Fehler: {ex.Message}.\nHaben alle Futterautomaten eine Bezeichung?");
                 }
                 futterautomaten.Add(output);
             }
