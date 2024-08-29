@@ -58,6 +58,7 @@ namespace FutterautomatenDatenbank.Models
             if (personToUpdate is not null)
             {
                 personToUpdate.Name = person.Name;
+                personToUpdate.Futterautomaten = person.Futterautomaten;    
                 db.SaveChanges();
             }
         }
