@@ -106,7 +106,7 @@
             person.Futterautomaten = new List<Futterautomat>();
         }
         person.Futterautomaten.Add(futterautomat);
-        FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, NewPerson(person));
+        FutterautomatenEFCoreRepository.UpdatePerson(person);
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
 
@@ -124,24 +124,8 @@
             var person = futterautomat.Person;
             if (person is null) return;
             person.Futterautomaten.Remove(futterautomat);
-            FutterautomatenEFCoreRepository.UpdatePerson(person.PersonId, NewPerson(person));
+            FutterautomatenEFCoreRepository.UpdatePerson(person);
         }
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
-
-    /// <summary>
-    /// Erzeugt eine neue Person ohne Datenbankreferenz, mit den Daten der übergebenen Person
-    /// </summary>
-    /// <param name="person"></param>
-    /// <returns></returns>
-    private Person NewPerson(Person person)
-    {
-        return new Person()
-        {
-            PersonId = person.PersonId,
-            Name = person.Name,
-            Futterautomaten = person.Futterautomaten
-        };
-    }
-
 }

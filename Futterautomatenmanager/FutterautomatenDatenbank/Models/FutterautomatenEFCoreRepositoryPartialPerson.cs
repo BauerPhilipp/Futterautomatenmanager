@@ -47,19 +47,17 @@ namespace FutterautomatenDatenbank.Models
         /// <param name="id">Die Id der zu Aktualisierenden Person</param>
         /// <param name="person">Die Daten mit welchen die Person aktualisiert wird</param>
         /// <exception cref="ArgumentException"></exception>
-        public void UpdatePerson(int id, Person person)
+        public void UpdatePerson(Person person)
         {
             if (person == null) throw new ArgumentException(nameof(person));
-            if (id != person.PersonId) return;
 
             using var db = this.contextFactory.CreateDbContext();
 
-            var personToUpdate = db.Personen.Find(id);
+            var personToUpdate = db.Personen.Find(person.PersonId);
 
             if (personToUpdate is not null)
             {
                 personToUpdate.Name = person.Name;
-                personToUpdate.Futterautomaten = person.Futterautomaten;
                 db.SaveChanges();
             }
         }

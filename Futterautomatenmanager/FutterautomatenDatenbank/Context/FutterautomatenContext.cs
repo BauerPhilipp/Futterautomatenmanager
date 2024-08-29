@@ -15,6 +15,10 @@ namespace FutterautomatenDatenbank.Context
     {
         public FutterautomatenContext(DbContextOptions<FutterautomatenContext> options) : base(options) { }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
+        }
         public virtual DbSet<Aquarium> Aquarien { get; set; }
         public virtual DbSet<Fuetterung> Fuetterungen { get; set; }
         public virtual DbSet<Futter> FutterArt { get; set; }

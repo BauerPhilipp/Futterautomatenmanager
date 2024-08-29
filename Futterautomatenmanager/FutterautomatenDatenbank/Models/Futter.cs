@@ -16,7 +16,7 @@ namespace FutterautomatenDatenbank.Models
         public int FutterId { get; set; }
 
         /// <summary>
-        /// Angabe sollte in Gramm erfolgen
+        /// Angabe sollte in mm erfolgen
         /// </summary>
         [Required]
         public float Packungsinhalt { get; set; }

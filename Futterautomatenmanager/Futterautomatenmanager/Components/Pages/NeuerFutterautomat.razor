@@ -206,7 +206,8 @@
             bool bezeichnungBereitsVergeben = FutterautomatenEFCoreRepository.GetFutterautomaten()
             .Any(f => f.Bezeichnung.ToLower() == neuerFutterautomat.Bezeichnung.ToLower());
 
-            if (bezeichnungBereitsVergeben)
+            if (bezeichnungBereitsVergeben && FutterautomatenEFCoreRepository.GetFutterautomat(FutterautomatId)
+            .Bezeichnung.ToLower() != BezeichnungFutterautomat.ToLower())
             {
                 IsFehler = true;
                 return;

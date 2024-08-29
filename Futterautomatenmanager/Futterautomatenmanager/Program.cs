@@ -84,7 +84,6 @@ namespace Futterautomatenmanager
                 if (dbFutterautomaten.Database.GetPendingMigrations().Any())
                     dbFutterautomaten.Database.Migrate();
             }
-
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();

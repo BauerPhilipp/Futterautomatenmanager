@@ -26,7 +26,7 @@ namespace FutterautomatenDatenbank.Models
         void AddPerson(Person person);
         Person GetPerson(int id);
         List<Person> GetPersonen();
-        void UpdatePerson(int id, Person person);
+        void UpdatePerson(Person person);
         void DeletePerson(int id);
 
         //Fütterungen
