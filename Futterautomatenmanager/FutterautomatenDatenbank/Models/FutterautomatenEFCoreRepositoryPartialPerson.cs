@@ -53,14 +53,8 @@ namespace FutterautomatenDatenbank.Models
 
             using var db = this.contextFactory.CreateDbContext();
 
-            var personToUpdate = db.Personen.Find(person.PersonId);
-
-            if (personToUpdate is not null)
-            {
-                personToUpdate.Name = person.Name;
-                personToUpdate.Futterautomaten = person.Futterautomaten;    
-                db.SaveChanges();
-            }
+            db.Entry(person).State = EntityState.Modified;
+            db.SaveChanges();
         }
         /// <summary>
         /// Entfernt eine Person aus der Datenbank

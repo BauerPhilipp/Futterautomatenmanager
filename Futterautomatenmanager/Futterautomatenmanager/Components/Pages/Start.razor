@@ -59,7 +59,7 @@
     {
         <label>Keine Person angemeldet</label>
     }
-    <button type="button" class="btn btn-danger" @onclick="OnDeliteButtonClicked">Lösche alle Futterautomaten</button>
+    <button type="button" class="btn btn-danger" @onclick="OnDeleteButtonClicked">Lösche alle Futterautomaten</button>
 </div>
 
 
@@ -113,19 +113,23 @@
     /// <summary>
     /// Löscht alle bestehenden Futterautomaten
     /// </summary>
-    private void OnDeliteButtonClicked()
+    private void OnDeleteButtonClicked()
     {
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
         if (Futterautomaten is null) return;
 
         foreach (var futterautomat in Futterautomaten)
         {
+            var inhaber = futterautomat.Person;
+            if (inhaber is not null)
+            {
+                inhaber.Futterautomaten.Remove(futterautomat);
+                FutterautomatenEFCoreRepository.UpdatePerson(inhaber);
+            }
+
             FutterautomatenEFCoreRepository.DeleteFutterautomat(futterautomat.FutterautomatId);
-            var person = futterautomat.Person;
-            if (person is null) return;
-            person.Futterautomaten.Remove(futterautomat);
-            FutterautomatenEFCoreRepository.UpdatePerson(person);
         }
+
         Futterautomaten = FutterautomatenEFCoreRepository.GetFutterautomaten();
     }
 }
