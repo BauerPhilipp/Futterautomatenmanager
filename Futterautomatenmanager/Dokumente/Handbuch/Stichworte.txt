@@ -1,3 +1,0 @@
-Raspberry pi imager dl
-https://www.raspberrypi.com/software/
-Installation der Software
