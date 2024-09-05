@@ -49,10 +49,18 @@
 
 
 @code {
-
+    /// <summary>
+    /// Die verfügbaren Aquarien
+    /// </summary>
     List<Aquarium> aquarien;
 
+    /// <summary>
+    /// Wenn fehlerhafte Eingabe
+    /// </summary>
     public bool IsFehler { get; set; }
+    /// <summary>
+    /// Fehlerbeschreibung
+    /// </summary>
     string FehlerLabel = "Ein Futterautomat verweist noch auf dieses Aquarium!";
 
 
@@ -61,6 +69,10 @@
         aquarien = futterautomatenEFCoreRepository.GetAquarien();
     }
 
+    /// <summary>
+    /// Löscht ein Futter
+    /// </summary>
+    /// <param name="aquariumId"></param>
     private void DeleteAquarium(int aquariumId)
     {
         bool isAquariumRef = futterautomatenEFCoreRepository.GetFutterautomaten().Any(f => f?.Aquarium?.AquariumId == aquariumId);

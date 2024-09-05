@@ -67,8 +67,17 @@
 
 
 @code {
+    /// <summary>
+    /// Der eingeloggte Benutzer
+    /// </summary>
     string angemeldeterUser = string.Empty;
+    /// <summary>
+    /// Liste der Aktuellen Futterautomaten
+    /// </summary>
     public List<Futterautomat>? Futterautomaten;
+    /// <summary>
+    /// Person die dem angemeldeten Benutzer entspricht
+    /// </summary>
     Person? person;
 
 
@@ -94,7 +103,7 @@
     }
 
     /// <summary>
-    /// erstellt einen neuen Futterautomaten
+    /// Erstellt einen neuen Futterautomaten
     /// </summary>
     private void OnCreateButtonClicked()
     {

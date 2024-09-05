@@ -16,13 +16,21 @@ namespace FutterautomatenDatenbank.Models
         public int FutterId { get; set; }
 
         /// <summary>
-        /// Angabe sollte in mm erfolgen
+        /// Angabe des verfügbaren Futters in mm
         /// </summary>
         [Required]
         public float Packungsinhalt { get; set; }
+        /// <summary>
+        /// Bezeichnung des Futters
+        /// </summary>
         public string FutterName { get; set; } = string.Empty;
+        /// <summary>
+        /// Informationen zum Futter
+        /// </summary>
         public string Beschreibung { get; set; } = string.Empty;
-
+        /// <summary>
+        /// Futterautomaten in denen das Futter verwendet wird
+        /// </summary>
         public virtual ICollection<Futterautomat>? Futterautomaten { get; set; } = new List<Futterautomat>();
     }
 }

@@ -40,13 +40,21 @@
 
 
 @code {
+    /// <summary>
+    /// Parameter aus der URI
+    /// </summary>
     [Parameter]
     public int FutterautomatId { get; set; } = -1;
+    /// <summary>
+    /// Parameter aus der URI
+    /// </summary>
     [Parameter]
     public int AquariumId { get; set; }
-
+    //Wird auf true gesetzt wenn ein Fehler auftritt
     private bool isFehler = false;
+    ///Fehlertext
     private string fehlerLabel = string.Empty;
+    //Variablen der Anzeige
     private string Name { get; set; } = string.Empty;
     private string Aufstellort { get; set; } = string.Empty;
     private string Groesseße { get; set; } = string.Empty;
@@ -68,7 +76,9 @@
         }
     }
 
-
+    //// <summary>
+    /// Speichert eingegebenen Werte
+    /// </summary>
     private void SaveData()
     {
         Aquarium aquarium = new()
@@ -114,6 +124,12 @@
             navigationManager.NavigateTo($"/aquariumverwaltung");
         }
     }
+
+    /// <summary>
+    /// Überprüfung ob alle eingaben in Ordnung
+    /// </summary>
+    /// <param name="aqauriumName"></param>
+    /// <returns></returns>
     private bool IsInputWrong(string aqauriumName)
     {
         bool exists = futterautomatenEFCoreRepository.GetAquarien().Any(a => a.Name == aqauriumName);

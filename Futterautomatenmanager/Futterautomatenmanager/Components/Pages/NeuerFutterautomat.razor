@@ -109,23 +109,34 @@
 }
 
 @code {
-    string s = "";
+    string s = ""; //noch in verwendung?
+    /// <summary>
+    /// Parameter aus der URI
+    /// </summary>
     [Parameter]
     public int FutterautomatId { get; set; } = -1;
-
+    /// <summary>
+    /// Parameter aus der URI
+    /// </summary>
     [Parameter]
     public int PersonId { get; set; }
+    /// <summary>
+    /// Manuelle Fütterung aktivieren
+    /// </summary>
     public bool ManuelleFuetterung { get; set; }
 
     string ausgewaehltesAquarium = string.Empty;
     string ausgewaehltesFutter = string.Empty;
     string ausgewaehlteFuetterung = string.Empty;
-
+    /// <summary>
+    /// Multiplikator für die Futtermenge
+    /// </summary>
     public float FaktorFuetterungen { get; set; } = 1;
 
     public string BezeichnungFutterautomat { get; set; } = string.Empty;
-
+    //true wenn ein fehler auftritt zur anzeige der Fehlermeldung
     private bool IsFehler { get; set; }
+    //Fehlermeldung
     private string fehlerLabel = "Bezeichnung ist bereits vergeben!";
 
     private List<Aquarium>? aquarien;
@@ -159,39 +170,62 @@
             StateHasChanged();
         }
     }
-
+    /// <summary>
+    /// Navigation zur Page für neue Aquarien
+    /// </summary>
     private void NeuesAquarium()
     {
         // if (FutterautomatId > 0) navigationManager.NavigateTo($"/neuesaquarium/{FutterautomatId}");
         if (FutterautomatId > 0) Speichern($"/neuesaquarium/{FutterautomatId}");
     }
+    /// <summary>
+    /// Navigation zur Page für neue Fütterung
+    /// </summary>
     private void NeueFuetterungErstellen()
     {
         //navigationManager.NavigateTo($"/neuefuetterung/{FutterautomatId}");
         if (FutterautomatId > 0) Speichern($"/neuefuetterung/{FutterautomatId}");
     }
+    /// <summary>
+    /// Navigation zur Page für neues Futter
+    /// </summary>
     private void NeuesFutterErstellen()
     {
 
         //navigationManager.NavigateTo($"/neuesfutter/{FutterautomatId}");
         if (FutterautomatId > 0) Speichern($"/neuesfutter/{FutterautomatId}");
     }
+    /// <summary>
+    /// Wird ausgeführt wenn ein neues Aquarium ausgewählt wurde
+    /// </summary>
+    /// <param name="e"></param>
     private void OnAquariumSelected(ChangeEventArgs e)
     {
         ausgewaehltesAquarium = e.Value.ToString();
     }
 
-
+    /// <summary>
+    /// Wird ausgeführt wenn ein neues Futter ausgewählt wurde
+    /// </summary>
+    /// <param name="e"></param>
     private void OnFutterSelected(ChangeEventArgs e)
     {
         ausgewaehltesFutter = e.Value.ToString();
     }
+    /// <summary>
+    /// Wird ausgeführt wenn eine neue Fütterunt ausgewählt wurde
+    /// </summary>
+    /// <param name="e"></param>
     private void OnFuetterungSelected(ChangeEventArgs e)
     {
+        //TODO: Methode nicht mehr in verwendung?
         ausgewaehlteFuetterung = e.Value.ToString();
     }
 
-    //Speichern / Aktualisieren Futterautomat
+    /// <summary>
+    /// Speichern bzw. aktualisieren des Futterautomaten 
+    /// </summary>
+    /// <param name="navLink"></param>
     private void Speichern(string navLink = "/")
     {
         if (FutterautomatId > 0)
@@ -220,7 +254,9 @@
         navigationManager.NavigateTo(navLink);
     }
 
-
+    /// <summary>
+    /// Aktualisiert das Aquarium
+    /// </summary>
     private void UpdateAquarium()
     {
         Aquarium aquarium;
@@ -234,6 +270,10 @@
             FutterautomatenEFCoreRepository.UpdateAquarium(aquarium);
         }
     }
+
+    /// <summary>
+    /// Aktualisiert das Futter
+    /// </summary>
     private void UpdateFutter()
     {
         Futter futter;
@@ -245,6 +285,10 @@
             FutterautomatenEFCoreRepository.UpdateFutter(futter);
         }
     }
+
+    /// <summary>
+    /// Aktualisiert die Fütterungen
+    /// </summary>
     private void UpdateFuetterungen()
     {
         if (ausgewaehlteFuetterung != "")
@@ -268,19 +312,27 @@
         }
     }
 
-
+    /// <summary>
+    /// Aktualisiert den Futterautomaten
+    /// </summary>
+    /// <param name="futterautomat"></param>
     private void UpdateFutterautomat(Futterautomat futterautomat)
     {
         futterautomat.FutterautomatId = FutterautomatId;
         FutterautomatenEFCoreRepository.UpdateFutterautomat(FutterautomatId, futterautomat);
     }
-
+    /// <summary>
+    /// Löscht den Futterautomaten und Navigiert zur Startseite
+    /// </summary>
     private void LoeschenFutterautomat()
     {
         FutterautomatenEFCoreRepository.DeleteFutterautomat(FutterautomatId);
         navigationManager.NavigateTo("/");
     }
-
+    //// <summary>
+    /// Löscht eine Fütterung mit der entsprechenden ID
+    /// </summary>
+    /// <param name="fuetterungId"></param>
     public void FuetterungLoeschen(int fuetterungId)
     {
         FutterautomatenEFCoreRepository.DeleteFuetterung(fuetterungId);

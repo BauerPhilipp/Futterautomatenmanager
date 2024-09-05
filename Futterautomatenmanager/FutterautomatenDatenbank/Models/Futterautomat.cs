@@ -22,15 +22,26 @@ namespace FutterautomatenDatenbank.Models
         /// Der Name des Futterautomaten. Dieser wird benötigt wenn über die API ein Futterautomat abgefagt werden soll
         /// </summary>
         public string Bezeichnung { get; set; } = string.Empty;
+        /// <summary>
+        /// Wenn eine manuelle Fütterung erfolgen soll. Ist für die API von Bedeutung.
+        /// </summary>
         public bool ManuelleFuetterung { get; set; }
 
-        // Die unterschiedlichen Fütterungen / Futterzeiten
+        /// <summary>
+        /// Die geplanten Fütterungen
+        /// </summary>
         public virtual ICollection<Fuetterung> Fuetterungen { get; set; } = new List<Fuetterung>();
-        //Futter welches im Futterautomaten eingefüllt ist
+        /// <summary>
+        /// Futter welches im Futterautomaten eingefüllt ist
+        /// </summary>
         public virtual Futter? Futter { get; set; }
-        //Das Aquarium in dem der Futterautomat integriert ist
+        /// <summary>
+        /// Das Aquarium in dem der Futterautomat integriert ist
+        /// </summary>
         public virtual Aquarium? Aquarium { get; set; }
-        //Die Person welche den Futterautomaten erstellt hat
+        /// <summary>
+        /// Die Person die den Futterautomaten erstellt hat
+        /// </summary>
         public virtual Person? Person { get; set; }
     }
 }

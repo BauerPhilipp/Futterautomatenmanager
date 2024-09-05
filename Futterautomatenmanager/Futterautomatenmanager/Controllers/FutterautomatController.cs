@@ -57,10 +57,7 @@ namespace Futterautomatenmanager.Controllers
         /// <returns></returns>
         [HttpGet("{bezeichnungFutterautomat}")]
         public IActionResult GetFutterautomaten(string bezeichnungFutterautomat)
-        {
-
-            //var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten()
-            //    .Where(f => f.Bezeichnung.ToLower() == bezeichnungFutterautomat.ToLower()).FirstOrDefault();           
+        {        
             var futterautomat = FutterautomatenEFCoreRepository.GetFutterautomaten()
                 .FirstOrDefault(f => f.Bezeichnung.ToLower() == bezeichnungFutterautomat.ToLower());
             if (futterautomat is null) return BadRequest("Kein Futterautomat mit diesem Namen vorhanden!");

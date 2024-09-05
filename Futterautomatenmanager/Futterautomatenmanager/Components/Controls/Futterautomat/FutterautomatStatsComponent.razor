@@ -20,9 +20,13 @@
 
 
 @code {
+    /// <summary>
+    /// Parameter der beim erstellen der Komponente übergeben wird
+    /// </summary>
     [CascadingParameter(Name = "FutterautomatId")]
     public int Id { get; set; }
 
+    //Variablen für die html Anzeige
     Futterautomat? futterautomat;
     string personName = string.Empty;
     string aquariumName = string.Empty;

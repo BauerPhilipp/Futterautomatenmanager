@@ -43,23 +43,36 @@
 }
 
 @code {
+    //Von der URI erhaltene ID des Futterautomaten
     [Parameter]
     public int FutterautomatId { get; set; }
-
+    //Von der URI erhaltene ID der Fütterung
     [Parameter]
     public int FuetterungId { get; set; }
-
+    /// <summary>
+    /// Tag an dem die Fütterung erfolgen soll
+    /// </summary>
     public DateOnly Datum { get; set; } = DateOnly.FromDateTime(DateTime.Now.AddDays(1));
 
+    /// <summary>
+    /// Uhrzeit zu der gefüttert werden soll.
+    /// </summary>
     public TimeOnly Uhrzeit { get; set; } = TimeOnly.FromDateTime(DateTime.Now);
-
+    /// <summary>
+    /// true wenn die Fütterung täglich erfolgen soll
+    /// </summary>
     public bool WiederholendeFuetterung { get; set; }
-
+    /// <summary>
+    /// Menge die pro Fütterung gefüttert werden soll
+    /// </summary>
     public int FutterMenge { get; set; } = 0;
-
+    //Fehlertext
     private string fehlerLabel = string.Empty;
+    //true wenn ein Fehler auftritt
     private bool isFehler = false;
-
+    /// <summary>
+    /// Speichern der eingestellten Werte
+    /// </summary>
     public void Speichern()
     {
         if (Datum <= DateOnly.FromDateTime(DateTime.Now.AddMinutes(1)) || FutterMenge < 1)

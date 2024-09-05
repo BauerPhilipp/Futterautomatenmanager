@@ -27,12 +27,18 @@
 
 
 @code {
+    /// <summary>
+    /// Parameter der URI
+    /// </summary>
     [Parameter]
     public int FutterautomatId { get; set; } = -1;
-
+    /// <summary>
+    /// Parameter der URI
+    /// </summary>
     [Parameter]
     public int FutterId { get; set; }
 
+    //Variablen der Anzeige
     public string Name { get; set; }
     public float Packungsinhalt { get; set; }
     public string Beschreibung { get; set; }
@@ -54,7 +60,9 @@
 
 
     }
-
+    /// <summary>
+    /// Speichern der eingegebenen Werte
+    /// </summary>
     private void Save()
     {
         //futter wird aktualisiert
@@ -87,8 +95,12 @@
         }
         navigationManager.NavigateTo($"/neuerfutterautomat/update/{FutterautomatId}");
     }
+    /// <summary>
+    /// Löscht ein Futter aus der Datenbank
+    /// </summary>
     private void Delete()
     {
+        //TODO: Kann gelöscht werden wenn nicht verwendet
         FutterautomatenEFCoreRepository.DeleteFutter(FutterId);
     }
 

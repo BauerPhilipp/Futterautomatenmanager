@@ -41,6 +41,9 @@
 
 
 @code {
+    /// <summary>
+    /// Liste mit verwendeten Futterarten
+    /// </summary>
     List<Futter> futter;
 
     protected override void OnInitialized()
@@ -48,6 +51,10 @@
         futter = futterautomatenEFCoreRepository.GetFutter();
     }
 
+    /// <summary>
+    /// Löscht ein Futter
+    /// </summary>
+    /// <param name="futterId"></param>
     private void DeleteFutter(int futterId)
     {
         futterautomatenEFCoreRepository.DeleteFutter(futterId);

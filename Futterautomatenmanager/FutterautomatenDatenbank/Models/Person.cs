@@ -6,11 +6,22 @@ using System.Threading.Tasks;
 
 namespace FutterautomatenDatenbank.Models
 {
-    //Stellt den Benutzer des Futterautomaten dar
+    /// <summary>
+    /// Stellt den Benutzer des Futterautomaten dar
+    /// </summary>
     public class Person
     {
+        /// <summary>
+        /// Eindeutige ID
+        /// </summary>
         public int PersonId { get; set; }
-        public string Name { get; set; } = string.Empty;    
+        /// <summary>
+        /// Bezeichnung des Benutzers
+        /// </summary>
+        public string Name { get; set; } = string.Empty;   
+        /// <summary>
+        /// Futterautomaten die diese Person erstellt hat
+        /// </summary>
         public virtual ICollection<Futterautomat>? Futterautomaten { get; set; }
     }
 }
